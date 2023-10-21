@@ -1,9 +1,7 @@
 package ru.vsu.cs.yurov.logics;
 
-import java.util.Stack;
-
 public class Player {
-    Stack<Piece> homePieces;
+    //Stack<Piece> homePieces;
     Piece[] pieces;
     int sixCounter;
     private PlayerColor color;
@@ -40,5 +38,13 @@ public class Player {
 
     public void setTiles(Tile[] tiles) {
         this.tiles = tiles;
+    }
+
+    public int getSixCounter() {
+        return sixCounter;
+    }
+
+    public void setSixCounter(int sixCounter) {
+        this.sixCounter = sixCounter;
     }
 }

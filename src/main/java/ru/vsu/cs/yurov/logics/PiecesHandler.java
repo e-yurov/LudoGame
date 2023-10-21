@@ -33,6 +33,7 @@ public class PiecesHandler {
             return;
         }
 
+        player.setSixCounter(0);
         for (Piece piece : player.getPieces()) {
             if (piece.getHomeState() == HomeState.IN) {
                 piece.setCanMove(number >= 5 && !player.tiles[0].isFull());

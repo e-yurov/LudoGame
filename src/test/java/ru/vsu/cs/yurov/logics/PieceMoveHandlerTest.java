@@ -3,18 +3,21 @@ package ru.vsu.cs.yurov.logics;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.vsu.cs.yurov.logics.actions.PieceActionType;
+import ru.vsu.cs.yurov.logics.actions.HomeState;
+import ru.vsu.cs.yurov.logics.actions.piece.PieceAction;
+import ru.vsu.cs.yurov.logics.actions.piece.PieceActionType;
 
 public class PieceMoveHandlerTest {
-    PieceMoveHandler pieceMoveHandler = new PieceMoveHandler();
-    Piece piece;
-    Player player;
-    Tile zeroTile;
+    private PieceMoveHandler pieceMoveHandler = new PieceMoveHandler();
+    private Piece piece;
+    private Player player;
+    private Tile zeroTile;
 
     @BeforeEach
     void beforeEachTest() {
         //pieceMoveHandler = new PieceMoveHandler();
         piece = new Piece();
+        piece.setCanMove(true);
         player = new Player();
         zeroTile = new Tile();
 
@@ -113,5 +116,30 @@ public class PieceMoveHandlerTest {
 
         Assertions.assertEquals(PieceActionType.MOVE_AND_BLOCK, pieceMoveHandler.handle(piece, 3));
         Assertions.assertEquals(PieceActionType.MOVE, pieceMoveHandler.handle(piece, 2));
+    }
+
+    @Test
+    void testDoNothing() {
+        Tile finalTile = new Tile();
+        finalTile.setFirstPiece(new Piece());
+        finalTile.setSecondPiece(new Piece());
+
+        piece.setTilesPassed(0);
+        piece.setCurrentTile(zeroTile);
+
+        player.setTiles(new Tile[]{zeroTile, new Tile(), new Tile(), finalTile});
+        player.setPieces(new Piece[]{piece});
+
+        PiecesHandler piecesHandler = new PiecesHandler();
+        piecesHandler.handle(3, player);
+
+        Assertions.assertEquals(PieceActionType.DO_NOTHING, pieceMoveHandler.handle(piece, 3));
+    }
+
+    @Test
+    void testCanLeaveHome() {
+        piece.setHomeState(HomeState.IN);
+
+        Assertions.assertEquals(PieceActionType.LEAVE_HOME, pieceMoveHandler.handle(piece, 6));
     }
 }

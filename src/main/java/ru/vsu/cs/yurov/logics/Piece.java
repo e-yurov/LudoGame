@@ -13,6 +13,10 @@ public class Piece {
     private Player player;
     private boolean hasFinished = false;
 
+    public Tile getNextTile(int number) {
+        return this.getPlayer().getTiles()[tilesPassed + number];
+    }
+
     public boolean canMove() {
         return canMove;
     }

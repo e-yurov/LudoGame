@@ -1,9 +1,17 @@
 package ru.vsu.cs.yurov.logics;
 
-import ru.vsu.cs.yurov.logics.actions.PieceActionType;
+import ru.vsu.cs.yurov.logics.actions.HomeState;
+import ru.vsu.cs.yurov.logics.actions.piece.PieceActionType;
 
 public class PieceMoveHandler {
     public PieceActionType handle(Piece piece, int number) {
+        if (!piece.canMove()){
+            return PieceActionType.DO_NOTHING;
+        }
+        if (piece.getHomeState() == HomeState.IN) {
+            return PieceActionType.LEAVE_HOME;
+        }
+
         Player player = piece.getPlayer();
         int tileToStepIndex = piece.getTilesPassed() + number;
         Tile tileToStep = player.tiles[tileToStepIndex];
