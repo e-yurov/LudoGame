@@ -168,4 +168,72 @@ public class PieceHandlerTest {
         Assertions.assertTrue(piece1.canMove());
         Assertions.assertFalse(piece2.canMove());
     }
+
+    @Test
+    void testBonusMoveWithBlocksOnRoad() {
+        PiecesHandler piecesHandler = new PiecesHandler();
+        Player player = new Player();
+        Piece piece = new Piece();
+        Tile zeroTile = new Tile();
+        Tile finishTile = new Tile();
+        Tile middleTile = new Tile();
+
+        zeroTile.setFirstPiece(piece);
+        middleTile.setFirstPiece(new Piece());
+        middleTile.setSecondPiece(new Piece());
+
+        Tile[] playerTiles = new Tile[21];
+        for (int i = 1; i < 21; i++) {
+            playerTiles[i] = new Tile();
+        }
+        playerTiles[0] = zeroTile;
+        playerTiles[5] = middleTile;
+        playerTiles[20] = finishTile;
+
+        piece.setTilesPassed(0);
+
+        player.setPieces(new Piece[]{piece});
+        player.setTiles(playerTiles);
+
+        piecesHandler.handle(10, player);
+        Assertions.assertTrue(piece.canMove());
+
+        piecesHandler.handle(20, player);
+        Assertions.assertTrue(piece.canMove());
+    }
+
+    @Test
+    void testBonusMoveWithBlocksOnEnd() {
+        PiecesHandler piecesHandler = new PiecesHandler();
+        Player player = new Player();
+        Piece piece = new Piece();
+        Tile zeroTile = new Tile();
+        Tile finishTile = new Tile();
+        Tile middleTile = new Tile();
+
+        zeroTile.setFirstPiece(piece);
+        middleTile.setFirstPiece(new Piece());
+        middleTile.setSecondPiece(new Piece());
+        finishTile.setFirstPiece(new Piece());
+        finishTile.setSecondPiece(new Piece());
+
+        Tile[] playerTiles = new Tile[21];
+        for (int i = 1; i < 21; i++) {
+            playerTiles[i] = new Tile();
+        }
+        playerTiles[0] = zeroTile;
+        playerTiles[10] = middleTile;
+        playerTiles[20] = finishTile;
+
+        piece.setTilesPassed(0);
+
+        player.setPieces(new Piece[]{piece});
+        player.setTiles(playerTiles);
+
+        piecesHandler.handle(10, player);
+        Assertions.assertFalse(piece.canMove());
+
+        piecesHandler.handle(20, player);
+        Assertions.assertFalse(piece.canMove());
+    }
 }

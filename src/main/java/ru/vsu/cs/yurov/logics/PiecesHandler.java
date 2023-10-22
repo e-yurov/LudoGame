@@ -46,11 +46,13 @@ public class PiecesHandler {
 
     private boolean checkTile(int number, Piece piece, Player player) {
         int tilesPassed = piece.getTilesPassed();
-        Tile currentTIle = player.tiles[tilesPassed];
 
         int nextTileIndex = tilesPassed + number;
         if (nextTileIndex >= Piece.TILES_COUNT) {
             return false;
+        }
+        if (number == 20 || number == 10) {
+            return !player.getTiles()[nextTileIndex].isFull();
         }
         for (int i = tilesPassed + 1; i <= nextTileIndex; i++) {
             if (player.tiles[i].isFull()) {

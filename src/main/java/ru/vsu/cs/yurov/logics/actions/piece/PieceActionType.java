@@ -45,9 +45,17 @@ public enum PieceActionType {
                 leaveCurrentTile(piece, number);
     }),
     LEAVE_HOME((piece, number) -> {
+                Tile startTile = piece.getPlayer().getTiles()[0];
+
                 piece.setHomeState(HomeState.OUT);
                 piece.setTilesPassed(0);
-                piece.setCurrentTile(piece.getPlayer().getTiles()[0]);
+                piece.setCurrentTile(startTile);
+
+                if (startTile.isEmpty()) {
+                    startTile.setFirstPiece(piece);
+                } else {
+                    startTile.setSecondPiece(piece);
+                }
     }),
     DO_NOTHING((piece, number) -> {});
 
@@ -73,7 +81,7 @@ public enum PieceActionType {
             currentTile.setFirstPiece(null);
         }
 
-        piece.setTilesPassed(piece.getTilesPassed() + number);
         piece.setCurrentTile(piece.getNextTile(number));
+        piece.setTilesPassed(piece.getTilesPassed() + number);
     }
 }

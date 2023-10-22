@@ -64,4 +64,12 @@ public class Piece {
     public void setHasFinished(boolean hasFinished) {
         this.hasFinished = hasFinished;
     }
+
+    public void bust() {
+        currentTile.removePiece(this);
+        tilesPassed = -1;
+        currentTile = null;
+        homeState = HomeState.IN;
+        player.setSixCounter(0);
+    }
 }

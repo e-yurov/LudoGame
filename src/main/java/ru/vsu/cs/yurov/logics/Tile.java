@@ -41,4 +41,13 @@ public class Tile {
     public void setSecondPiece(Piece secondPiece) {
         this.secondPiece = secondPiece;
     }
+
+    public void removePiece(Piece piece) {
+        if (piece == firstPiece) {
+            firstPiece = secondPiece;
+            secondPiece = null;
+        } else if (piece == secondPiece) {
+            secondPiece = null;
+        }
+    }
 }

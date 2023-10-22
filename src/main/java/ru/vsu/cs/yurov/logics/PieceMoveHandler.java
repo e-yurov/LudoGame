@@ -20,15 +20,19 @@ public class PieceMoveHandler {
             piece.setHasFinished(true);
             return PieceActionType.FINISH;
         }
-        if (!tileToStep.isEmpty() &&
-                //tileToStep.getSecondPiece() == null &&
+        /*if (!tileToStep.isEmpty() &&
                 tileToStep.getFirstPiece().getPlayer().getColor() != piece.getPlayer().getColor()) {
             return PieceActionType.HIT;
         }
-        if (!tileToStep.isEmpty()
-                //&& tileToStep.getSecondPiece() == null
-        ) {
+        if (!tileToStep.isEmpty()) {
             return PieceActionType.MOVE_AND_BLOCK;
+        }*/
+        if (!tileToStep.isEmpty()) {
+            if (tileToStep.isSafe() ||
+                    tileToStep.getFirstPiece().getPlayer().getColor() == piece.getPlayer().getColor()) {
+                return PieceActionType.MOVE_AND_BLOCK;
+            }
+            return PieceActionType.HIT;
         }
 
         return PieceActionType.MOVE;

@@ -1,5 +1,7 @@
 package ru.vsu.cs.yurov.logics;
 
+import ru.vsu.cs.yurov.logics.actions.HomeState;
+
 public class Player {
     //Stack<Piece> homePieces;
     Piece[] pieces;
@@ -7,6 +9,7 @@ public class Player {
     private PlayerColor color;
 
     Tile[] tiles;
+    private Piece lastPiece;
 
     public void makeMove(int number, Piece piece) {
 
@@ -46,5 +49,13 @@ public class Player {
 
     public void setSixCounter(int sixCounter) {
         this.sixCounter = sixCounter;
+    }
+
+    public Piece getLastPiece() {
+        return lastPiece;
+    }
+
+    public void setLastPiece(Piece lastPiece) {
+        this.lastPiece = lastPiece;
     }
 }
