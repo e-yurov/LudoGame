@@ -5,7 +5,7 @@ import ru.vsu.cs.yurov.logics.actions.HomeState;
 public class Player {
     //Stack<Piece> homePieces;
     Piece[] pieces;
-    int sixCounter;
+    int sixCounter = 0;
     private PlayerColor color;
 
     Tile[] tiles;
@@ -57,5 +57,23 @@ public class Player {
 
     public void setLastPiece(Piece lastPiece) {
         this.lastPiece = lastPiece;
+    }
+
+    public boolean canMove() {
+        boolean result = false;
+        for (Piece piece: pieces) {
+            result |= piece.canMove();
+        }
+
+        return result;
+    }
+
+    public boolean isAllFinished() {
+        boolean result = true;
+        for (Piece piece: pieces) {
+            result &= piece.hasFinished();
+        }
+
+        return result;
     }
 }

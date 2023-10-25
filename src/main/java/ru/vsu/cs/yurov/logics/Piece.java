@@ -4,7 +4,7 @@ import ru.vsu.cs.yurov.logics.actions.HomeState;
 
 public class Piece {
     public static final int TILES_COUNT = 72;
-    public static final int COLORED_TILES_COUNT = 7;
+    public static final int COLORED_TILES_COUNT = 8;
     private Tile currentTile;
     private boolean isOnColorTrack;
     private boolean canMove;
