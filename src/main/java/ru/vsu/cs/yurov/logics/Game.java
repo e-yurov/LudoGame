@@ -1,5 +1,7 @@
 package ru.vsu.cs.yurov.logics;
 
+import javafx.event.EventHandler;
+import javafx.scene.text.Text;
 import ru.vsu.cs.yurov.graphics.TextGameDrawer;
 import ru.vsu.cs.yurov.logics.actions.ActionReceiver;
 import ru.vsu.cs.yurov.logics.actions.HomeState;
@@ -8,8 +10,7 @@ import ru.vsu.cs.yurov.logics.actions.PlayerActionType;
 import ru.vsu.cs.yurov.logics.actions.piece.PieceActionReceiver;
 import ru.vsu.cs.yurov.logics.actions.piece.PieceActionType;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Game {
     //private Board board;
@@ -30,6 +31,9 @@ public class Game {
     Tile[] greenTiles;
 
     private TextGameDrawer gameDrawer;
+
+    private Piece selectedPiece = null;
+    private Text text;
     public Game() {
         createGame();
         /*board = new Board();
@@ -50,7 +54,7 @@ public class Game {
         die = new Die();
         pieceMoveHandler= new PieceMoveHandler();
         piecesHandler = new PiecesHandler();
-        normalTiles = new Tile[Piece.TILES_COUNT];
+        normalTiles = new Tile[68];
         redTiles = new Tile[Piece.COLORED_TILES_COUNT];
         blueTiles = new Tile[Piece.COLORED_TILES_COUNT];
         yellowTiles = new Tile[Piece.COLORED_TILES_COUNT];
@@ -86,11 +90,13 @@ public class Game {
             piece.setCurrentTile(null);
             piece.setHasFinished(false);
             piece.setHomeState(HomeState.IN);
+            piece.setIndex(i);
             playerPieces[i] = piece;
         }
         playerPieces[0].setHomeState(HomeState.OUT);
         playerPieces[0].setTilesPassed(0);
         playerPieces[0].setCurrentTile(playerTiles[0]);
+        playerPieces[0].setCanMove(true);
         playerTiles[0].setFirstPiece(playerPieces[0]);
         player.setPieces(playerPieces);
         player.setColor(color);
@@ -140,15 +146,24 @@ public class Game {
     }
 
     private void generateTiles() {
+        HashSet<Integer> safeTilesIndexes = new HashSet<>(List.of(4, 11, 16, 21, 28, 33, 38, 45, 50, 55, 62,67));
+
         for (int i = 0; i < normalTiles.length; i++) {
-            normalTiles[i] = new Tile();
+            Tile tile = new Tile();
+            tile.setIndex(i);
+            tile.setSafe(safeTilesIndexes.contains(i));
+            normalTiles[i] = tile;
         }
 
         for (int i = 0; i < redTiles.length; i++) {
             redTiles[i] = new Tile();
+            redTiles[i].setIndex(68 + i);
             blueTiles[i] = new Tile();
+            blueTiles[i].setIndex(68 + i + Piece.COLORED_TILES_COUNT);
             yellowTiles[i] = new Tile();
+            yellowTiles[i].setIndex(68 + i + Piece.COLORED_TILES_COUNT * 2);
             greenTiles[i] = new Tile();
+            greenTiles[i].setIndex(68 + i + Piece.COLORED_TILES_COUNT * 3);
         }
     }
 
@@ -181,7 +196,27 @@ public class Game {
         //board.makeMove();
     }
 
+    public void makeMoveGraphic(Piece piece) {
+        Player player = players[currentPlayerIndex];
+        makeMove(-1, piece);
+        gameDrawer.drawGame();
+
+        if (player.isAllFinished()) {
+            isPlaying = false;
+        }
+        currentPlayerIndex++;
+        currentPlayerIndex %= players.length;
+    }
+
+    public void draw() {
+        gameDrawer.drawGame();
+    }
+
     private void makeMove(int bonusNumber) {
+        makeMove(bonusNumber, receiver.receive(null, -1));
+    }
+
+    private void makeMove(int bonusNumber, Piece piece) {
         Player player = players[currentPlayerIndex];
         int number = (bonusNumber > 0) ? bonusNumber : die.getNumber();
         if (number == 6 && player.getSixCounter() == 2) {
@@ -193,17 +228,29 @@ public class Game {
             return;
         }
 
-        Piece piece = receiver.receive(player, number);
+        text.setText("Die roll: " + number + "\nPlayer " + player.getColor());
+
+        //Piece piece = receiver.receive(player, number);
+        selectedPiece = null;
         player.setLastPiece(piece);
         PieceActionType actionType = pieceMoveHandler.handle(piece, number);
         actionType.getAction().perform(piece, number);
 
         if (actionType == PieceActionType.HIT) {
-            makeMove(20);
+            makeMove(20, piece);
         }
         if (actionType == PieceActionType.FINISH) {
-            makeMove(10);
+            makeMove(10, piece);
         }
+    }
+
+    public Piece[] getPieces() {
+        List<Piece> result = new ArrayList<>();
+        for (Player player: players) {
+            result.addAll(Arrays.asList(player.getPieces()));
+        }
+
+        return result.toArray(new Piece[0]);
     }
 
     public void setPlayers(Player[] players) {
@@ -302,5 +349,21 @@ public class Game {
 
     public void setGameDrawer(TextGameDrawer gameDrawer) {
         this.gameDrawer = gameDrawer;
+    }
+
+    public Piece getSelectedPiece() {
+        return selectedPiece;
+    }
+
+    public void setSelectedPiece(Piece selectedPiece) {
+        this.selectedPiece = selectedPiece;
+    }
+
+    public Text getText() {
+        return text;
+    }
+
+    public void setText(Text text) {
+        this.text = text;
     }
 }

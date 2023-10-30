@@ -26,6 +26,10 @@ public class Tile {
         return index;
     }
 
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
     public Piece getFirstPiece() {
         return firstPiece;
     }

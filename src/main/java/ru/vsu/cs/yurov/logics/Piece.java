@@ -13,6 +13,8 @@ public class Piece {
     private Player player;
     private boolean hasFinished = false;
 
+    private int index;
+
     public Tile getNextTile(int number) {
         return this.getPlayer().getTiles()[tilesPassed + number];
     }
@@ -71,5 +73,13 @@ public class Piece {
         currentTile = null;
         homeState = HomeState.IN;
         player.setSixCounter(0);
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 }
