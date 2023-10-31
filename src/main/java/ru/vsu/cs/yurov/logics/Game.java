@@ -2,7 +2,9 @@ package ru.vsu.cs.yurov.logics;
 
 import javafx.event.EventHandler;
 import javafx.scene.text.Text;
+import javafx.stage.Popup;
 import ru.vsu.cs.yurov.graphics.TextGameDrawer;
+import ru.vsu.cs.yurov.graphics.fx.GraphicPiece;
 import ru.vsu.cs.yurov.logics.actions.ActionReceiver;
 import ru.vsu.cs.yurov.logics.actions.HomeState;
 import ru.vsu.cs.yurov.logics.actions.PlayerAction;
@@ -34,6 +36,7 @@ public class Game {
 
     private Piece selectedPiece = null;
     private Text text;
+    private int currentNumber = -1;
     public Game() {
         createGame();
         /*board = new Board();
@@ -73,12 +76,12 @@ public class Game {
     private void generatePlayer(int index, int startTileIndex, Tile[] colorTiles, PlayerColor color) {
         Player player = new Player();
 
-        Tile[] playerTiles = new Tile[Piece.TILES_COUNT - Piece.COLORED_TILES_COUNT];
+        Tile[] playerTiles = new Tile[Piece.TILES_COUNT];
         for (int i = 0; i < Piece.TILES_COUNT - Piece.COLORED_TILES_COUNT; i++) {
             int tileIndex = (startTileIndex + i) % 68;
             playerTiles[i] = normalTiles[tileIndex];
         }
-        for (int i = 56, j = 0; i < 64; i++, j++) {
+        for (int i = 64, j = 0; i < Piece.TILES_COUNT; i++, j++) {
             playerTiles[i] = colorTiles[j];
         }
         player.setTiles(playerTiles);
@@ -198,7 +201,7 @@ public class Game {
 
     public void makeMoveGraphic(Piece piece) {
         Player player = players[currentPlayerIndex];
-        makeMove(-1, piece);
+        //makeMove(-1, piece);
         gameDrawer.drawGame();
 
         if (player.isAllFinished()) {
@@ -208,39 +211,66 @@ public class Game {
         currentPlayerIndex %= players.length;
     }
 
+    public void calcBeforeMove(int bonusNumber) {
+        Player player = players[currentPlayerIndex];
+        currentNumber = bonusNumber < 0 ? die.getNumber() : bonusNumber;
+        if (currentNumber == 6 && player.getSixCounter() == 2) {
+            player.getLastPiece().bust();
+        }
+        piecesHandler.handle(currentNumber, player);
+
+        /*if (!player.canMove()) {
+            return;
+        }*/
+
+        if (currentNumber <= 6) {
+            text.setText("Die roll: " + currentNumber + "\nPlayer " + player.getColor());
+        } else {
+            text.setText("BonusMove: " + currentNumber + "\nPlayer " + player.getColor());
+        }
+    }
+
     public void draw() {
         gameDrawer.drawGame();
     }
 
     private void makeMove(int bonusNumber) {
-        makeMove(bonusNumber, receiver.receive(null, -1));
+        makeMove(receiver.receive(null, -1));
     }
 
-    private void makeMove(int bonusNumber, Piece piece) {
+    public PieceActionType makeMove(Piece piece) {
         Player player = players[currentPlayerIndex];
-        int number = (bonusNumber > 0) ? bonusNumber : die.getNumber();
-        if (number == 6 && player.getSixCounter() == 2) {
-            player.getLastPiece().bust();
-        }
-        piecesHandler.handle(number, player);
 
-        if (!player.canMove()) {
-            return;
-        }
-
-        text.setText("Die roll: " + number + "\nPlayer " + player.getColor());
 
         //Piece piece = receiver.receive(player, number);
-        selectedPiece = null;
         player.setLastPiece(piece);
-        PieceActionType actionType = pieceMoveHandler.handle(piece, number);
-        actionType.getAction().perform(piece, number);
+        PieceActionType actionType = pieceMoveHandler.handle(piece, currentNumber);
+        actionType.getAction().perform(piece, currentNumber);
 
-        if (actionType == PieceActionType.HIT) {
-            makeMove(20, piece);
+        return actionType;
+    }
+
+    public void selectNextPlayer() {
+        currentPlayerIndex++;
+        currentPlayerIndex %= players.length;
+    }
+
+    public void calcGraphicPieces(GraphicPiece[] graphicPieces) {
+        for (GraphicPiece graphicPiece: graphicPieces) {
+            if (graphicPiece.getPiece().canMove() &&
+                    graphicPiece.getPiece().getPlayer() == players[currentPlayerIndex]) {
+                graphicPiece.setStrokeWidth(3F);
+            } else {
+                graphicPiece.setStrokeWidth(0F);
+            }
         }
-        if (actionType == PieceActionType.FINISH) {
-            makeMove(10, piece);
+    }
+
+
+    public void checkWin() {
+        boolean hasFinished = false;
+        for (Player player: players) {
+            hasFinished |= player.isAllFinished();
         }
     }
 

@@ -13,6 +13,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import ru.vsu.cs.yurov.graphics.TextGameDrawer;
 import ru.vsu.cs.yurov.logics.Game;
@@ -35,15 +36,6 @@ public class MyApplication extends Application {
     private GraphicPiece[] graphicPieces;
 
     private PieceActionReceiver receiver = new PieceActionReceiver(){
-        /*@Override
-        public Piece receive(Player player, int number) {
-            Piece selectedPiece = null;
-            while (selectedPiece == null) {
-                selectedPiece = game.getSelectedPiece();
-            }
-            return selectedPiece;
-        }*/
-
         @Override
         public Piece receive(Player player, int number) {
             return graphicPieces[0].getPiece();
@@ -51,16 +43,16 @@ public class MyApplication extends Application {
     };
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
         Pane root = new Pane();
-        root.setOnMouseClicked(mouseEvent -> System.out.printf("x: %.0f, y: %.0f\n", mouseEvent.getX(), mouseEvent.getY()));
+        //root.setOnMouseClicked(mouseEvent -> System.out.printf("x: %.0f, y: %.0f\n", mouseEvent.getX(), mouseEvent.getY()));
         ObservableList<Node> rootChildren = root.getChildren();
         Image board = new Image("board.png");
         ImageView view = new ImageView(board);
         view.setFitWidth(BOARD_SIZE);
         view.setFitHeight(BOARD_SIZE);
 
-        Rectangle tile = new Rectangle(TILE_LONG_SIDE, TILE_SHORT_SIDE);
+        /*Rectangle tile = new Rectangle(TILE_LONG_SIDE, TILE_SHORT_SIDE);
         tile.setFill(Color.CHOCOLATE);
         tile.setX(304);
         tile.setY(12 + TILE_SHORT_SIDE);
@@ -70,10 +62,8 @@ public class MyApplication extends Application {
         tile2.setY(12 + TILE_SHORT_SIDE * 2);
         Rectangle tile3 = new Rectangle(TILE_LONG_SIDE, TILE_SHORT_SIDE);
         tile3.setFill(Color.DARKCYAN);
-        //tile3.setX(498);
-        //tile3.setY(846);
         tile3.setX(498);
-        tile3.setY(846);
+        tile3.setY(846);*/
 
         Text text = new Text();
         text.setX(930);
@@ -82,6 +72,8 @@ public class MyApplication extends Application {
         Button startButton = new Button("Start game");
         startButton.setOnAction(actionEvent -> {
             game.draw();
+            game.calcBeforeMove(-1);
+            startButton.setDisable(true);
         });
         /*GraphicPiece graphicPieceCorner0 = new GraphicPiece(Color.color(0.0D, 0.4D, 0.0D));
         graphicPieceCorner0.setCenterX(385);
@@ -112,6 +104,7 @@ public class MyApplication extends Application {
                 for (GraphicPiece graphicPiece: graphicPieces) {
                     graphicPieceDisposer.dispose(graphicTiles, graphicPiece);
                 }
+                game.calcGraphicPieces(graphicPieces);
             }
         });
         game.setReceiver(receiver);
@@ -168,7 +161,7 @@ public class MyApplication extends Application {
 
         for (int i = 17; i < 24; i++) {
             result[i] = new GraphicTile(TileForm.VERTICAL, i,
-                    847 - TILE_SHORT_SIDE * (i - 17), 305, TILE_SHORT_SIDE, TILE_LONG_SIDE);
+                    846 - TILE_SHORT_SIDE * (i - 17), 305, TILE_SHORT_SIDE, TILE_LONG_SIDE);
         }
         result[24] = new GraphicTile(TileForm.CORNER_VERTICAL_BOTTOM, 24,
                 847 - TILE_SHORT_SIDE * 7 - 4, 305,
