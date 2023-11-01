@@ -1,11 +1,26 @@
 package ru.vsu.cs.yurov.graphics.fx;
 
+import ru.vsu.cs.yurov.graphics.fx.GraphicPiece;
+import ru.vsu.cs.yurov.graphics.fx.GraphicTile;
+import ru.vsu.cs.yurov.logics.Player;
 import ru.vsu.cs.yurov.logics.Tile;
 import ru.vsu.cs.yurov.logics.actions.HomeState;
 
-public class GraphicPieceDisposer {
-    // long 97
-    // short 42
+public class GameDrawer {
+    private GameDrawer() {}
+
+    public static void drawGame(GraphicPiece[] graphicPieces, GraphicTile[] graphicTiles, Player currentPlayer) {
+        for (GraphicPiece graphicPiece: graphicPieces) {
+            dispose(graphicTiles, graphicPiece);
+
+            if (graphicPiece.getPiece().canMove() &&
+                    graphicPiece.getPiece().getPlayer() == currentPlayer) {
+                graphicPiece.setStrokeWidth(3F);
+            } else {
+                graphicPiece.setStrokeWidth(0F);
+            }
+        }
+    }
 
     public static void dispose(GraphicTile[] tiles, GraphicPiece graphicPiece) {
         if (graphicPiece.getPiece().hasFinished()) {
@@ -156,9 +171,5 @@ public class GraphicPieceDisposer {
                 graphicPiece.setRadius(12);
             }
         }
-    }
-
-    private GraphicTile calculateTile(GraphicTile[] tiles, int index) {
-        return tiles[index];
     }
 }

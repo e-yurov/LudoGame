@@ -4,7 +4,7 @@ import ru.vsu.cs.yurov.logics.actions.HomeState;
 import ru.vsu.cs.yurov.logics.actions.piece.PieceActionType;
 
 public class PieceActionTypeDefiner {
-    public PieceActionType handle(Piece piece, int number) {
+    public PieceActionType defineAction(Piece piece, int number) {
         if (!piece.canMove()){
             return PieceActionType.DO_NOTHING;
         }

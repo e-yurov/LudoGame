@@ -20,7 +20,7 @@ public class PieceHandlerTest {
         player.tiles = new Tile[]{zeroTile, new Tile(), new Tile(), new Tile(), new Tile(), new Tile(), finalTile};
         player.pieces = new Piece[]{piece};
 
-        pieceMoveAbilityComputer.handle(6, player);
+        pieceMoveAbilityComputer.compute(6, player);
 
         Assertions.assertTrue(piece.canMove());
     }
@@ -42,7 +42,7 @@ public class PieceHandlerTest {
         player.tiles = new Tile[]{zeroTile, new Tile(), new Tile(), new Tile(), new Tile(), new Tile(), finalTile};
         player.pieces = new Piece[]{piece};
 
-        pieceMoveAbilityComputer.handle(6, player);
+        pieceMoveAbilityComputer.compute(6, player);
 
         Assertions.assertFalse(piece.canMove());
     }
@@ -70,7 +70,7 @@ public class PieceHandlerTest {
         player.tiles = new Tile[]{zeroTile, firstTile, new Tile(), new Tile(), new Tile(), new Tile(), finalTile, new Tile()};
         player.pieces = new Piece[]{piece1, piece2};
 
-        pieceMoveAbilityComputer.handle(6, player);
+        pieceMoveAbilityComputer.compute(6, player);
 
         Assertions.assertTrue(piece1.canMove());
         Assertions.assertFalse(piece2.canMove());
@@ -93,7 +93,7 @@ public class PieceHandlerTest {
         player.tiles = new Tile[]{zeroTile, new Tile(), new Tile(), blockTile, new Tile(), new Tile()};
         player.pieces = new Piece[]{piece};
 
-        pieceMoveAbilityComputer.handle(5, player);
+        pieceMoveAbilityComputer.compute(5, player);
 
         Assertions.assertFalse(piece.canMove());
     }
@@ -118,13 +118,13 @@ public class PieceHandlerTest {
         playerTiles[71] = new Tile();
         player.pieces = new Piece[]{piece};
 
-        pieceMoveAbilityComputer.handle(1, player);
+        pieceMoveAbilityComputer.compute(1, player);
         Assertions.assertTrue(piece.canMove());
 
-        pieceMoveAbilityComputer.handle(2, player);
+        pieceMoveAbilityComputer.compute(2, player);
         Assertions.assertFalse(piece.canMove());
 
-        pieceMoveAbilityComputer.handle(6, player);
+        pieceMoveAbilityComputer.compute(6, player);
         Assertions.assertFalse(piece.canMove());
     }
 
@@ -139,10 +139,10 @@ public class PieceHandlerTest {
         player.tiles = new Tile[]{new Tile(), new Tile(), new Tile(), new Tile(), new Tile(), new Tile(), new Tile()};
         player.pieces = new Piece[]{piece};
 
-        pieceMoveAbilityComputer.handle(6, player);
+        pieceMoveAbilityComputer.compute(6, player);
         Assertions.assertTrue(piece.canMove());
 
-        pieceMoveAbilityComputer.handle(5, player);
+        pieceMoveAbilityComputer.compute(5, player);
         Assertions.assertTrue(piece.canMove());
     }
 
@@ -164,7 +164,7 @@ public class PieceHandlerTest {
         player.tiles = new Tile[]{zeroTile, new Tile(), new Tile(), new Tile(), new Tile(), new Tile(), new Tile()};
         player.pieces = new Piece[]{piece1, piece2};
 
-        pieceMoveAbilityComputer.handle(5, player);
+        pieceMoveAbilityComputer.compute(5, player);
         Assertions.assertTrue(piece1.canMove());
         Assertions.assertFalse(piece2.canMove());
     }
@@ -195,10 +195,10 @@ public class PieceHandlerTest {
         player.setPieces(new Piece[]{piece});
         player.setTiles(playerTiles);
 
-        pieceMoveAbilityComputer.handle(10, player);
+        pieceMoveAbilityComputer.compute(10, player);
         Assertions.assertTrue(piece.canMove());
 
-        pieceMoveAbilityComputer.handle(20, player);
+        pieceMoveAbilityComputer.compute(20, player);
         Assertions.assertTrue(piece.canMove());
     }
 
@@ -230,10 +230,10 @@ public class PieceHandlerTest {
         player.setPieces(new Piece[]{piece});
         player.setTiles(playerTiles);
 
-        pieceMoveAbilityComputer.handle(10, player);
+        pieceMoveAbilityComputer.compute(10, player);
         Assertions.assertFalse(piece.canMove());
 
-        pieceMoveAbilityComputer.handle(20, player);
+        pieceMoveAbilityComputer.compute(20, player);
         Assertions.assertFalse(piece.canMove());
     }
 }

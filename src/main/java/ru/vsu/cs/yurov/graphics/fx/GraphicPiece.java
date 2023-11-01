@@ -12,7 +12,7 @@ public class GraphicPiece extends Circle {
     private Game game;
     private boolean isBonusMove;
 
-    public GraphicPiece(Color color, Game game, Stage stage) {
+    public GraphicPiece(Color color, Game game, Stage stage, MyApplication application) {
         piece = new Piece();
         this.game = game;
         //setFill(Color.color(0.4D, 0.0D, 0.0D));
@@ -31,7 +31,7 @@ public class GraphicPiece extends Circle {
 
         setOnMouseClicked(mouseEvent -> {
             //game.setSelectedPiece(piece.canMove() ? piece : null);
-            if (piece.canMove() && piece.getPlayer() == game.getPlayers()[game.getCurrentPlayerIndex()]){
+            if (piece.canMove() && piece.getPlayer() == game.currentPlayer()){
                 PieceActionType actionType = game.makeMove(piece);
                 if (actionType == PieceActionType.HIT) {
                     game.calculateBeforeMove(20);
@@ -41,15 +41,17 @@ public class GraphicPiece extends Circle {
                     game.selectNextPlayer();
                     game.calculateBeforeMove(-1);
                 }
-                game.draw();
+                //gameDrawer.drawGame(game.currentPlayer());
+                application.drawGame();
             }
 
-            if (piece.getPlayer() == game.getPlayers()[game.getCurrentPlayerIndex()] && !piece.getPlayer().canMove()) {
+            if (piece.getPlayer() == game.currentPlayer() && !piece.getPlayer().canMove()) {
                 game.selectNextPlayer();
                 game.calculateBeforeMove(-1);
-                game.draw();
+                //gameDrawer.drawGame(game.currentPlayer());
+                application.drawGame();
             }
-            game.checkWin(stage);
+            application.checkWin();
         });
     }
 

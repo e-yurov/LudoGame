@@ -7,7 +7,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import ru.vsu.cs.yurov.graphics.fx.GraphicPiece;
 import ru.vsu.cs.yurov.logics.actions.HomeState;
 import ru.vsu.cs.yurov.logics.actions.piece.PieceActionReceiver;
 import ru.vsu.cs.yurov.logics.actions.piece.PieceActionType;
@@ -15,15 +14,12 @@ import ru.vsu.cs.yurov.logics.actions.piece.PieceActionType;
 import java.util.*;
 
 public class Game {
-    //private Board board;
     private Player[] players;
     private int currentPlayerIndex;
     private Die die;
-    private boolean isPlaying;
 
     private PieceActionTypeDefiner pieceActionTypeDefiner;
     private PieceActionReceiver receiver;
-    //private Map<PlayerActionType, PlayerAction> playerActionMap;
     private PieceMoveAbilityComputer pieceMoveAbilityComputer;
 
     private Tile[] normalTiles;
@@ -31,8 +27,6 @@ public class Game {
     Tile[] blueTiles;
     Tile[] yellowTiles;
     Tile[] greenTiles;
-
-    private GameDrawer gameDrawer;
 
     private Piece selectedPiece = null;
     private Text text;
@@ -68,7 +62,7 @@ public class Game {
         if (currentNumber == 6 && player.getSixCounter() == 2) {
             player.getLastPiece().bust();
         }
-        pieceMoveAbilityComputer.handle(currentNumber, player);
+        pieceMoveAbilityComputer.compute(currentNumber, player);
 
         /*if (!player.canMove()) {
             return;
@@ -81,17 +75,13 @@ public class Game {
         }
     }
 
-    public void draw() {
-        gameDrawer.drawGame();
-    }
-
     public PieceActionType makeMove(Piece piece) {
         Player player = players[currentPlayerIndex];
 
 
         //Piece piece = receiver.receive(player, number);
         player.setLastPiece(piece);
-        PieceActionType actionType = pieceActionTypeDefiner.handle(piece, currentNumber);
+        PieceActionType actionType = pieceActionTypeDefiner.defineAction(piece, currentNumber);
         actionType.getAction().perform(piece, currentNumber);
 
         return actionType;
@@ -102,45 +92,7 @@ public class Game {
         currentPlayerIndex %= players.length;
     }
 
-    public void calcGraphicPieces(GraphicPiece[] graphicPieces) {
-        for (GraphicPiece graphicPiece: graphicPieces) {
-            if (graphicPiece.getPiece().canMove() &&
-                    graphicPiece.getPiece().getPlayer() == players[currentPlayerIndex]) {
-                graphicPiece.setStrokeWidth(3F);
-            } else {
-                graphicPiece.setStrokeWidth(0F);
-            }
-        }
-    }
-
-    public void checkWin(Stage mainStage) {
-        PlayerColor wonColor = isOver();
-        if (wonColor == null) {
-            return;
-        }
-
-        Text victoryText = new Text(wonColor + " player won!");
-        victoryText.setFont(Font.font(20D));
-        Button closeButton = new Button("Close");
-
-        VBox root = new VBox(victoryText, closeButton);
-        root.setSpacing(50D);
-        root.setAlignment(Pos.CENTER);
-
-        Scene scene = new Scene(root, 200, 200);
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        stage.setTitle("Congratulations!");
-        stage.show();
-
-        closeButton.setOnAction(actionEvent -> {
-            mainStage.close();
-            stage.close();
-        });
-        stage.setOnCloseRequest(windowEvent -> closeButton.fire());
-    }
-
-    public PlayerColor isOver() {
+    public PlayerColor getFinishedPlayerColor() {
         for (Player player: players) {
             if (player.isAllFinished()) {
                 return player.getColor();
@@ -163,119 +115,6 @@ public class Game {
         return players[currentPlayerIndex];
     }
 
-    public void setPlayers(Player[] players) {
-        this.players = players;
-    }
-
-    public void setCurrentPlayerIndex(int currentPlayerIndex) {
-        this.currentPlayerIndex = currentPlayerIndex;
-    }
-
-    public void setDie(Die die) {
-        this.die = die;
-    }
-
-
-    public void setPieceMoveHandler(PieceActionTypeDefiner pieceActionTypeDefiner) {
-        this.pieceActionTypeDefiner = pieceActionTypeDefiner;
-    }
-
-    public void setReceiver(PieceActionReceiver receiver) {
-        this.receiver = receiver;
-    }
-
-    public void setPiecesHandler(PieceMoveAbilityComputer pieceMoveAbilityComputer) {
-        this.pieceMoveAbilityComputer = pieceMoveAbilityComputer;
-    }
-
-    public void setNormalTiles(Tile[] normalTiles) {
-        this.normalTiles = normalTiles;
-    }
-
-    public void setRedTiles(Tile[] redTiles) {
-        this.redTiles = redTiles;
-    }
-
-    public void setBlueTiles(Tile[] blueTiles) {
-        this.blueTiles = blueTiles;
-    }
-
-    public void setYellowTiles(Tile[] yellowTiles) {
-        this.yellowTiles = yellowTiles;
-    }
-
-    public void setGreenTiles(Tile[] greenTiles) {
-        this.greenTiles = greenTiles;
-    }
-
-
-    public Player[] getPlayers() {
-        return players;
-    }
-
-    public int getCurrentPlayerIndex() {
-        return currentPlayerIndex;
-    }
-
-    public Die getDie() {
-        return die;
-    }
-
-    public boolean isPlaying() {
-        return isPlaying;
-    }
-
-    public PieceActionTypeDefiner getPieceMoveHandler() {
-        return pieceActionTypeDefiner;
-    }
-
-    public PieceActionReceiver getReceiver() {
-        return receiver;
-    }
-
-    public PieceMoveAbilityComputer getPiecesHandler() {
-        return pieceMoveAbilityComputer;
-    }
-
-    public Tile[] getNormalTiles() {
-        return normalTiles;
-    }
-
-    public Tile[] getRedTiles() {
-        return redTiles;
-    }
-
-    public Tile[] getBlueTiles() {
-        return blueTiles;
-    }
-
-    public Tile[] getYellowTiles() {
-        return yellowTiles;
-    }
-
-    public Tile[] getGreenTiles() {
-        return greenTiles;
-    }
-
-    public void setGameDrawer(GameDrawer gameDrawer) {
-        this.gameDrawer = gameDrawer;
-    }
-
-    public Piece getSelectedPiece() {
-        return selectedPiece;
-    }
-
-    public void setSelectedPiece(Piece selectedPiece) {
-        this.selectedPiece = selectedPiece;
-    }
-
-    public Text getText() {
-        return text;
-    }
-
-    public void setText(Text text) {
-        this.text = text;
-    }
 
     public static class Creator {
         public static Game create() {
@@ -346,7 +185,113 @@ public class Game {
             player.setPieces(playerPieces);
             player.setColor(color);
 
-           return player;
+            return player;
         }
+    }
+
+
+    public void setPlayers(Player[] players) {
+        this.players = players;
+    }
+
+    public void setCurrentPlayerIndex(int currentPlayerIndex) {
+        this.currentPlayerIndex = currentPlayerIndex;
+    }
+
+    public void setDie(Die die) {
+        this.die = die;
+    }
+
+    public void setPieceMoveHandler(PieceActionTypeDefiner pieceActionTypeDefiner) {
+        this.pieceActionTypeDefiner = pieceActionTypeDefiner;
+    }
+
+    public void setReceiver(PieceActionReceiver receiver) {
+        this.receiver = receiver;
+    }
+
+    public void setPiecesHandler(PieceMoveAbilityComputer pieceMoveAbilityComputer) {
+        this.pieceMoveAbilityComputer = pieceMoveAbilityComputer;
+    }
+
+    public void setNormalTiles(Tile[] normalTiles) {
+        this.normalTiles = normalTiles;
+    }
+
+    public void setRedTiles(Tile[] redTiles) {
+        this.redTiles = redTiles;
+    }
+
+    public void setBlueTiles(Tile[] blueTiles) {
+        this.blueTiles = blueTiles;
+    }
+
+    public void setYellowTiles(Tile[] yellowTiles) {
+        this.yellowTiles = yellowTiles;
+    }
+
+    public void setGreenTiles(Tile[] greenTiles) {
+        this.greenTiles = greenTiles;
+    }
+
+
+    public Player[] getPlayers() {
+        return players;
+    }
+
+    public int getCurrentPlayerIndex() {
+        return currentPlayerIndex;
+    }
+
+    public Die getDie() {
+        return die;
+    }
+
+    public PieceActionTypeDefiner getPieceMoveHandler() {
+        return pieceActionTypeDefiner;
+    }
+
+    public PieceActionReceiver getReceiver() {
+        return receiver;
+    }
+
+    public PieceMoveAbilityComputer getPiecesHandler() {
+        return pieceMoveAbilityComputer;
+    }
+
+    public Tile[] getNormalTiles() {
+        return normalTiles;
+    }
+
+    public Tile[] getRedTiles() {
+        return redTiles;
+    }
+
+    public Tile[] getBlueTiles() {
+        return blueTiles;
+    }
+
+    public Tile[] getYellowTiles() {
+        return yellowTiles;
+    }
+
+    public Tile[] getGreenTiles() {
+        return greenTiles;
+    }
+
+    public Piece getSelectedPiece() {
+        return selectedPiece;
+    }
+
+    public void setSelectedPiece(Piece selectedPiece) {
+        this.selectedPiece = selectedPiece;
+    }
+
+    public Text getText() {
+        return text;
+    }
+
+    public void setText(Text text) {
+        this.text = text;
     }
 }

@@ -3,7 +3,7 @@ package ru.vsu.cs.yurov.logics;
 import ru.vsu.cs.yurov.logics.actions.HomeState;
 
 public class PieceMoveAbilityComputer {
-    public void handle(int number, Player player) {
+    public void compute(int number, Player player) {
         if (number == 6) {
             player.addSixCounter();
 

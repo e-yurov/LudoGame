@@ -44,7 +44,7 @@ public class PieceActionTypeDefinerTest {
         player.setTiles(playerTiles);
 
 
-        Assertions.assertEquals(PieceActionType.FINISH, pieceActionTypeDefiner.handle(piece, 1));
+        Assertions.assertEquals(PieceActionType.FINISH, pieceActionTypeDefiner.defineAction(piece, 1));
     }
 
     @Test
@@ -69,7 +69,7 @@ public class PieceActionTypeDefinerTest {
 
         player.setTiles(playerTiles);
 
-        Assertions.assertEquals(PieceActionType.FINISH, pieceActionTypeDefiner.handle(piece, 3));
+        Assertions.assertEquals(PieceActionType.FINISH, pieceActionTypeDefiner.defineAction(piece, 3));
     }
 
     @Test
@@ -93,8 +93,8 @@ public class PieceActionTypeDefinerTest {
 
         player.setTiles(new Tile[]{zeroTile, new Tile(), new Tile(), finalTile});
 
-        Assertions.assertEquals(PieceActionType.HIT, pieceActionTypeDefiner.handle(piece, 3));
-        Assertions.assertEquals(PieceActionType.MOVE, pieceActionTypeDefiner.handle(piece, 2));
+        Assertions.assertEquals(PieceActionType.HIT, pieceActionTypeDefiner.defineAction(piece, 3));
+        Assertions.assertEquals(PieceActionType.MOVE, pieceActionTypeDefiner.defineAction(piece, 2));
     }
 
     @Test
@@ -113,8 +113,8 @@ public class PieceActionTypeDefinerTest {
 
         player.setTiles(new Tile[]{zeroTile, new Tile(), new Tile(), finalTile});
 
-        Assertions.assertEquals(PieceActionType.MOVE_AND_BLOCK, pieceActionTypeDefiner.handle(piece, 3));
-        Assertions.assertEquals(PieceActionType.MOVE, pieceActionTypeDefiner.handle(piece, 2));
+        Assertions.assertEquals(PieceActionType.MOVE_AND_BLOCK, pieceActionTypeDefiner.defineAction(piece, 3));
+        Assertions.assertEquals(PieceActionType.MOVE, pieceActionTypeDefiner.defineAction(piece, 2));
     }
 
     @Test
@@ -130,15 +130,15 @@ public class PieceActionTypeDefinerTest {
         player.setPieces(new Piece[]{piece});
 
         PieceMoveAbilityComputer pieceMoveAbilityComputer = new PieceMoveAbilityComputer();
-        pieceMoveAbilityComputer.handle(3, player);
+        pieceMoveAbilityComputer.compute(3, player);
 
-        Assertions.assertEquals(PieceActionType.DO_NOTHING, pieceActionTypeDefiner.handle(piece, 3));
+        Assertions.assertEquals(PieceActionType.DO_NOTHING, pieceActionTypeDefiner.defineAction(piece, 3));
     }
 
     @Test
     void testCanLeaveHome() {
         piece.setHomeState(HomeState.IN);
 
-        Assertions.assertEquals(PieceActionType.LEAVE_HOME, pieceActionTypeDefiner.handle(piece, 6));
+        Assertions.assertEquals(PieceActionType.LEAVE_HOME, pieceActionTypeDefiner.defineAction(piece, 6));
     }
 }

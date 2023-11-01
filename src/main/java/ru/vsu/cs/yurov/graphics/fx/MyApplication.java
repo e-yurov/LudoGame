@@ -2,11 +2,14 @@ package ru.vsu.cs.yurov.graphics.fx;
 
 import javafx.application.Application;
 import javafx.collections.ObservableList;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -27,6 +30,7 @@ public class MyApplication extends Application {
     private Game game;
     //private GraphicPieceDisposer graphicPieceDisposer = new GraphicPieceDisposer();
     private GraphicPiece[] graphicPieces;
+    private GraphicTile[] graphicTiles;
 
     private PieceActionReceiver receiver = new PieceActionReceiver(){
         @Override
@@ -34,7 +38,6 @@ public class MyApplication extends Application {
             return graphicPieces[0].getPiece();
         }
     };
-
 
     private Stage stage;
     @Override
@@ -52,12 +55,11 @@ public class MyApplication extends Application {
         text.setX(930);
         text.setY(30);
 
-
         game = Game.Creator.create();
         game.setText(text);
-        GraphicTile[] graphicTiles = generateGraphicTiles();
+        graphicTiles = generateGraphicTiles();
         graphicPieces = generateGraphicPieces();
-        game.setGameDrawer(new GameDrawer(){
+        /*game.setGameDrawer(new GameDrawer(){
             @Override
             public void drawGame() {
                 for (GraphicPiece graphicPiece: graphicPieces) {
@@ -65,7 +67,8 @@ public class MyApplication extends Application {
                 }
                 game.calcGraphicPieces(graphicPieces);
             }
-        });
+        });*/
+        //game.setGameDrawer();
         game.setReceiver(receiver);
 
         rootChildren.addAll(view);
@@ -77,10 +80,10 @@ public class MyApplication extends Application {
         stage.setScene(scene);
         stage.show();
 
-        game.draw();
+        drawGame();
         game.calculateBeforeMove(-1);
 
-        //testFinish();
+        testFinish();
         /*game.setDie(new Die(){
             @Override
             public int getNumber() {
@@ -108,6 +111,36 @@ public class MyApplication extends Application {
         });*/
     }
 
+    public void drawGame() {
+        GameDrawer.drawGame(graphicPieces, graphicTiles, game.currentPlayer());
+    }
+
+    public void checkWin() {
+        PlayerColor wonColor = game.getFinishedPlayerColor();
+        if (wonColor == null) {
+            return;
+        }
+
+        Text victoryText = new Text(wonColor + " player won!");
+        victoryText.setFont(Font.font(20D));
+        Button closeButton = new Button("Close");
+
+        VBox root = new VBox(victoryText, closeButton);
+        root.setSpacing(50D);
+        root.setAlignment(Pos.CENTER);
+
+        Scene scene = new Scene(root, 200, 200);
+        Stage popupStage = new Stage();
+        popupStage.setScene(scene);
+        popupStage.setTitle("Congratulations!");
+        popupStage.show();
+
+        closeButton.setOnAction(actionEvent -> {
+            stage.close();
+            popupStage.close();
+        });
+        popupStage.setOnCloseRequest(windowEvent -> closeButton.fire());
+    }
 
     public void drawRectangles(GraphicTile[] graphicTiles, List<Node> children) {
         for (int i = 0; i < graphicTiles.length; i++) {
@@ -230,14 +263,14 @@ public class MyApplication extends Application {
             Random random = new Random();
             int num = random.nextInt(1, 3);
 
-            GraphicPiece graphicPiece1 = new GraphicPiece(Color.color(0.0D, 0.4D, 0.0D), game, stage);
+            GraphicPiece graphicPiece1 = new GraphicPiece(Color.color(0.0D, 0.4D, 0.0D), game, stage, this);
             Piece piece1 = new Piece();
             piece1.setCurrentTile(tile);
             tile.setFirstPiece(piece1);
             graphicPiece1.setPiece(piece1);
             GraphicPiece graphicPiece2 = null;
             if (num == 2) {
-                graphicPiece2 = new GraphicPiece(Color.color(0.0D, 0.4D, 0.0D), game, stage);
+                graphicPiece2 = new GraphicPiece(Color.color(0.0D, 0.4D, 0.0D), game, stage, this);
                 Piece piece2 = new Piece();
                 piece2.setCurrentTile(tile);
                 tile.setSecondPiece(piece2);
@@ -257,7 +290,7 @@ public class MyApplication extends Application {
         Piece[] pieces = game.getPieces();
         GraphicPiece[] result = new GraphicPiece[pieces.length];
         for (int i = 0; i < pieces.length; i++) {
-            result[i] = new GraphicPiece(pieces[i].getPlayer().getColor().getRgbColor(), game, stage);
+            result[i] = new GraphicPiece(pieces[i].getPlayer().getColor().getRgbColor(), game, stage, this);
             result[i].setPiece(pieces[i]);
         }
 
