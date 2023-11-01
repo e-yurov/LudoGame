@@ -7,7 +7,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import ru.vsu.cs.yurov.graphics.TextGameDrawer;
 import ru.vsu.cs.yurov.graphics.fx.GraphicPiece;
 import ru.vsu.cs.yurov.logics.actions.HomeState;
 import ru.vsu.cs.yurov.logics.actions.piece.PieceActionReceiver;
@@ -33,26 +32,12 @@ public class Game {
     Tile[] yellowTiles;
     Tile[] greenTiles;
 
-    private TextGameDrawer gameDrawer;
+    private GameDrawer gameDrawer;
 
     private Piece selectedPiece = null;
     private Text text;
     private int currentNumber = -1;
-    public Game() {
-        createGame();
-        /*board = new Board();
-        players = new Player[4];
-        currentPlayerIndex = 0;
-        die = new Die();
-        isPlaying = false;
-        receiver = new PieceActionReceiver();
-        playerActionMap = new HashMap<>();
-        pieceMoveAbilityComputer = new PieceMoveAbilityComputer();
-        normalTiles = new Tile[68];
-        redTiles = new Tile[7];*/
-    }
-
-    /*private void createGame() {
+    private Game() {
         players = new Player[4];
         currentPlayerIndex = 0;
         die = new Die();
@@ -63,141 +48,9 @@ public class Game {
         blueTiles = new Tile[Piece.COLORED_TILES_COUNT];
         yellowTiles = new Tile[Piece.COLORED_TILES_COUNT];
         greenTiles = new Tile[Piece.COLORED_TILES_COUNT];
-        generateTiles();
-        generatePlayers();
     }
 
-    private void generatePlayers() {
-        generatePlayer(0, 38, redTiles, PlayerColor.RED);
-        generatePlayer(1, 21, blueTiles, PlayerColor.BLUE);
-        generatePlayer(2, 4, yellowTiles, PlayerColor.YELLOW);
-        generatePlayer(3, 55, greenTiles, PlayerColor.GREEN);
-    }
-
-    private void generatePlayer(int index, int startTileIndex, Tile[] colorTiles, PlayerColor color) {
-        Player player = new Player();
-
-        Tile[] playerTiles = new Tile[Piece.TILES_COUNT];
-        for (int i = 0; i < Piece.TILES_COUNT - Piece.COLORED_TILES_COUNT; i++) {
-            int tileIndex = (startTileIndex + i) % 68;
-            playerTiles[i] = normalTiles[tileIndex];
-        }
-        for (int i = 64, j = 0; i < Piece.TILES_COUNT; i++, j++) {
-            playerTiles[i] = colorTiles[j];
-        }
-        player.setTiles(playerTiles);
-        Piece[] playerPieces = new Piece[4];
-        for (int i = 0; i < playerPieces.length; i++) {
-            Piece piece = new Piece();
-            piece.setPlayer(player);
-            piece.setTilesPassed(-1);
-            piece.setCurrentTile(null);
-            piece.setHasFinished(false);
-            piece.setHomeState(HomeState.IN);
-            piece.setIndex(i);
-            playerPieces[i] = piece;
-        }
-        playerPieces[0].setHomeState(HomeState.OUT);
-        playerPieces[0].setTilesPassed(0);
-        playerPieces[0].setCurrentTile(playerTiles[0]);
-        playerPieces[0].setCanMove(true);
-        playerTiles[0].setFirstPiece(playerPieces[0]);
-        player.setPieces(playerPieces);
-        player.setColor(color);
-
-        players[index] = player;
-    }
-
-    *//*private void generatePlayersOld() {
-        Player redPlayer = new Player();
-        Player bluePlayer = new Player();
-        Player yellowPlayer = new Player();
-        Player greenPlayer = new Player();
-
-        Tile[] redPlayerTiles = new Tile[Piece.TILES_COUNT - Piece.COLORED_TILES_COUNT];
-        for (int i = 0; i < Piece.TILES_COUNT - Piece.COLORED_TILES_COUNT; i++) {
-            int tileIndex = (38 + i) % 68;
-            redPlayerTiles[i] = normalTiles[tileIndex];
-        }
-        for (int i = 56, j = 0; i < 64; i++, j++) {
-            redPlayerTiles[i] = redTiles[j];
-        }
-        redPlayer.setTiles(redPlayerTiles);
-        Piece[] redPlayerPieces = new Piece[4];
-        for (int i = 0; i < redPlayerPieces.length; i++) {
-            Piece piece = new Piece();
-            piece.setPlayer(redPlayer);
-            piece.setTilesPassed(-1);
-            piece.setCurrentTile(null);
-            piece.setHasFinished(false);
-            piece.setHomeState(HomeState.IN);
-            redPlayerPieces[i] = piece;
-        }
-        redPlayerPieces[0].setHomeState(HomeState.OUT);
-        redPlayerPieces[0].setTilesPassed(0);
-        redPlayerPieces[0].setCurrentTile(redPlayerTiles[0]);
-        redPlayerTiles[0].setFirstPiece(redPlayerPieces[0]);
-        redPlayer.setPieces(redPlayerPieces);
-        redPlayer.setColor(PlayerColor.RED);
-
-        players[0] = redPlayer;
-        players[1] = bluePlayer;
-        players[2] = yellowPlayer;
-        players[3] = greenPlayer;
-    }*//*
-
-    private void generateTiles() {
-        HashSet<Integer> safeTilesIndexes = new HashSet<>(List.of(4, 11, 16, 21, 28, 33, 38, 45, 50, 55, 62,67));
-
-        for (int i = 0; i < normalTiles.length; i++) {
-            Tile tile = new Tile();
-            tile.setIndex(i);
-            tile.setSafe(safeTilesIndexes.contains(i));
-            normalTiles[i] = tile;
-        }
-
-        for (int i = 0; i < redTiles.length; i++) {
-            redTiles[i] = new Tile();
-            redTiles[i].setIndex(68 + i);
-            blueTiles[i] = new Tile();
-            blueTiles[i].setIndex(68 + i + Piece.COLORED_TILES_COUNT);
-            yellowTiles[i] = new Tile();
-            yellowTiles[i].setIndex(68 + i + Piece.COLORED_TILES_COUNT * 2);
-            greenTiles[i] = new Tile();
-            greenTiles[i].setIndex(68 + i + Piece.COLORED_TILES_COUNT * 3);
-        }
-    }*/
-
-    public void start() {
-        isPlaying = true;
-        Player player;
-
-        while (isPlaying) {
-            gameDrawer.drawGame();
-
-            player = players[currentPlayerIndex];
-            makeMove(-1);
-
-            if (player.isAllFinished()) {
-                isPlaying = false;
-            }
-            currentPlayerIndex++;
-            currentPlayerIndex %= players.length;
-        }
-
-        //int number = die.getNumber();
-
-        //pieceMoveAbilityComputer.handle(number, player);
-
-
-        //PlayerActionType playerActionType = receiver.receive();
-        //PlayerAction playerAction = playerActionMap.get(playerActionType);
-        //playerAction.perform();
-
-        //board.makeMove();
-    }
-
-    public void makeMoveGraphic(Piece piece) {
+    /*public void makeMoveGraphic(Piece piece) {
         Player player = players[currentPlayerIndex];
         //makeMove(-1, piece);
         gameDrawer.drawGame();
@@ -207,9 +60,9 @@ public class Game {
         }
         currentPlayerIndex++;
         currentPlayerIndex %= players.length;
-    }
+    }*/
 
-    public void calcBeforeMove(int bonusNumber) {
+    public void calculateBeforeMove(int bonusNumber) {
         Player player = players[currentPlayerIndex];
         currentNumber = bonusNumber < 0 ? die.getNumber() : bonusNumber;
         if (currentNumber == 6 && player.getSixCounter() == 2) {
@@ -230,10 +83,6 @@ public class Game {
 
     public void draw() {
         gameDrawer.drawGame();
-    }
-
-    private void makeMove(int bonusNumber) {
-        makeMove(receiver.receive(null, -1));
     }
 
     public PieceActionType makeMove(Piece piece) {
@@ -308,6 +157,10 @@ public class Game {
         }
 
         return result.toArray(new Piece[0]);
+    }
+
+    public Player currentPlayer() {
+        return players[currentPlayerIndex];
     }
 
     public void setPlayers(Player[] players) {
@@ -404,7 +257,7 @@ public class Game {
         return greenTiles;
     }
 
-    public void setGameDrawer(TextGameDrawer gameDrawer) {
+    public void setGameDrawer(GameDrawer gameDrawer) {
         this.gameDrawer = gameDrawer;
     }
 
@@ -427,31 +280,42 @@ public class Game {
     public static class Creator {
         public static Game create() {
             Game game = new Game();
+            generateTiles(game);
+            generatePlayers(game);
+
+            return game;
         }
 
-        private void createGame() {
-            players = new Player[4];
-            currentPlayerIndex = 0;
-            die = new Die();
-            pieceActionTypeDefiner = new PieceActionTypeDefiner();
-            pieceMoveAbilityComputer = new PieceMoveAbilityComputer();
-            normalTiles = new Tile[68];
-            redTiles = new Tile[Piece.COLORED_TILES_COUNT];
-            blueTiles = new Tile[Piece.COLORED_TILES_COUNT];
-            yellowTiles = new Tile[Piece.COLORED_TILES_COUNT];
-            greenTiles = new Tile[Piece.COLORED_TILES_COUNT];
-            generateTiles();
-            generatePlayers();
+        private static void generateTiles(Game game) {
+            HashSet<Integer> safeTilesIndexes = new HashSet<>(List.of(4, 11, 16, 21, 28, 33, 38, 45, 50, 55, 62,67));
+
+            for (int i = 0; i < game.normalTiles.length; i++) {
+                Tile tile = new Tile();
+                tile.setIndex(i);
+                tile.setSafe(safeTilesIndexes.contains(i));
+                game.normalTiles[i] = tile;
+            }
+
+            for (int i = 0; i < game.redTiles.length; i++) {
+                game.redTiles[i] = new Tile();
+                game.redTiles[i].setIndex(68 + i);
+                game.blueTiles[i] = new Tile();
+                game.blueTiles[i].setIndex(68 + i + Piece.COLORED_TILES_COUNT);
+                game.yellowTiles[i] = new Tile();
+                game.yellowTiles[i].setIndex(68 + i + Piece.COLORED_TILES_COUNT * 2);
+                game.greenTiles[i] = new Tile();
+                game.greenTiles[i].setIndex(68 + i + Piece.COLORED_TILES_COUNT * 3);
+            }
         }
 
-        private void generatePlayers() {
-            generatePlayer(0, 38, redTiles, PlayerColor.RED);
-            generatePlayer(1, 21, blueTiles, PlayerColor.BLUE);
-            generatePlayer(2, 4, yellowTiles, PlayerColor.YELLOW);
-            generatePlayer(3, 55, greenTiles, PlayerColor.GREEN);
+        private static void generatePlayers(Game game) {
+            game.players[0] = generatePlayer(0, 38, game.redTiles, PlayerColor.RED, game.normalTiles);
+            game.players[1] = generatePlayer(1, 21, game.blueTiles, PlayerColor.BLUE, game.normalTiles);
+            game.players[2] = generatePlayer(2, 4, game.yellowTiles, PlayerColor.YELLOW, game.normalTiles);
+            game.players[3] = generatePlayer(3, 55, game.greenTiles, PlayerColor.GREEN, game.normalTiles);
         }
 
-        private void generatePlayer(int index, int startTileIndex, Tile[] colorTiles, PlayerColor color) {
+        private static Player generatePlayer(int index, int startTileIndex, Tile[] colorTiles, PlayerColor color, Tile[] normalTiles) {
             Player player = new Player();
 
             Tile[] playerTiles = new Tile[Piece.TILES_COUNT];
@@ -482,67 +346,7 @@ public class Game {
             player.setPieces(playerPieces);
             player.setColor(color);
 
-            players[index] = player;
-        }
-
-    /*private void generatePlayersOld() {
-        Player redPlayer = new Player();
-        Player bluePlayer = new Player();
-        Player yellowPlayer = new Player();
-        Player greenPlayer = new Player();
-
-        Tile[] redPlayerTiles = new Tile[Piece.TILES_COUNT - Piece.COLORED_TILES_COUNT];
-        for (int i = 0; i < Piece.TILES_COUNT - Piece.COLORED_TILES_COUNT; i++) {
-            int tileIndex = (38 + i) % 68;
-            redPlayerTiles[i] = normalTiles[tileIndex];
-        }
-        for (int i = 56, j = 0; i < 64; i++, j++) {
-            redPlayerTiles[i] = redTiles[j];
-        }
-        redPlayer.setTiles(redPlayerTiles);
-        Piece[] redPlayerPieces = new Piece[4];
-        for (int i = 0; i < redPlayerPieces.length; i++) {
-            Piece piece = new Piece();
-            piece.setPlayer(redPlayer);
-            piece.setTilesPassed(-1);
-            piece.setCurrentTile(null);
-            piece.setHasFinished(false);
-            piece.setHomeState(HomeState.IN);
-            redPlayerPieces[i] = piece;
-        }
-        redPlayerPieces[0].setHomeState(HomeState.OUT);
-        redPlayerPieces[0].setTilesPassed(0);
-        redPlayerPieces[0].setCurrentTile(redPlayerTiles[0]);
-        redPlayerTiles[0].setFirstPiece(redPlayerPieces[0]);
-        redPlayer.setPieces(redPlayerPieces);
-        redPlayer.setColor(PlayerColor.RED);
-
-        players[0] = redPlayer;
-        players[1] = bluePlayer;
-        players[2] = yellowPlayer;
-        players[3] = greenPlayer;
-    }*/
-
-        private void generateTiles() {
-            HashSet<Integer> safeTilesIndexes = new HashSet<>(List.of(4, 11, 16, 21, 28, 33, 38, 45, 50, 55, 62,67));
-
-            for (int i = 0; i < normalTiles.length; i++) {
-                Tile tile = new Tile();
-                tile.setIndex(i);
-                tile.setSafe(safeTilesIndexes.contains(i));
-                normalTiles[i] = tile;
-            }
-
-            for (int i = 0; i < redTiles.length; i++) {
-                redTiles[i] = new Tile();
-                redTiles[i].setIndex(68 + i);
-                blueTiles[i] = new Tile();
-                blueTiles[i].setIndex(68 + i + Piece.COLORED_TILES_COUNT);
-                yellowTiles[i] = new Tile();
-                yellowTiles[i].setIndex(68 + i + Piece.COLORED_TILES_COUNT * 2);
-                greenTiles[i] = new Tile();
-                greenTiles[i].setIndex(68 + i + Piece.COLORED_TILES_COUNT * 3);
-            }
+           return player;
         }
     }
 }

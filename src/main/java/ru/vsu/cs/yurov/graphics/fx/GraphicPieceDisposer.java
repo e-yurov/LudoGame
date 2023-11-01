@@ -7,7 +7,7 @@ public class GraphicPieceDisposer {
     // long 97
     // short 42
 
-    public void dispose(GraphicTile[] tiles, GraphicPiece graphicPiece) {
+    public static void dispose(GraphicTile[] tiles, GraphicPiece graphicPiece) {
         if (graphicPiece.getPiece().hasFinished()) {
             int x = 450, y = 450, distance = 50;
             switch (graphicPiece.getPiece().getPlayer().getColor()) {

@@ -2,23 +2,16 @@ package ru.vsu.cs.yurov.graphics.fx;
 
 import javafx.application.Application;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.stage.Popup;
 import javafx.stage.Stage;
-import ru.vsu.cs.yurov.graphics.TextGameDrawer;
 import ru.vsu.cs.yurov.logics.*;
 import ru.vsu.cs.yurov.logics.actions.piece.PieceActionReceiver;
 
@@ -32,7 +25,7 @@ public class MyApplication extends Application {
     public static final int TILE_SHORT_SIDE = (int) Math.round(96 * ((double)BOARD_SIZE / 2048));
 
     private Game game;
-    private GraphicPieceDisposer graphicPieceDisposer = new GraphicPieceDisposer();
+    //private GraphicPieceDisposer graphicPieceDisposer = new GraphicPieceDisposer();
     private GraphicPiece[] graphicPieces;
 
     private PieceActionReceiver receiver = new PieceActionReceiver(){
@@ -55,58 +48,20 @@ public class MyApplication extends Application {
         view.setFitWidth(BOARD_SIZE);
         view.setFitHeight(BOARD_SIZE);
 
-        /*Rectangle tile = new Rectangle(TILE_LONG_SIDE, TILE_SHORT_SIDE);
-        tile.setFill(Color.CHOCOLATE);
-        tile.setX(304);
-        tile.setY(12 + TILE_SHORT_SIDE);
-        Rectangle tile2 = new Rectangle(TILE_LONG_SIDE, TILE_SHORT_SIDE);
-        tile2.setFill(Color.CORNSILK);
-        tile2.setX(304);
-        tile2.setY(12 + TILE_SHORT_SIDE * 2);
-        Rectangle tile3 = new Rectangle(TILE_LONG_SIDE, TILE_SHORT_SIDE);
-        tile3.setFill(Color.DARKCYAN);
-        tile3.setX(498);
-        tile3.setY(846);*/
-
         Text text = new Text();
         text.setX(930);
         text.setY(30);
 
-        /*Button startButton = new Button("Start game");
-        startButton.setOnAction(actionEvent -> {
-            game.draw();
-            game.calcBeforeMove(-1);
-            startButton.setDisable(true);
-        });*/
 
-        /*GraphicPiece graphicPieceCorner0 = new GraphicPiece(Color.color(0.0D, 0.4D, 0.0D));
-        graphicPieceCorner0.setCenterX(385);
-        graphicPieceCorner0.setCenterY(325);
-        GraphicPiece graphicPieceCorner1 = new GraphicPiece(Color.color(0.0D, 0.4D, 0.0D));
-        graphicPieceCorner1.setCenterX(352);
-        graphicPieceCorner1.setCenterY(325);
-        GraphicPiece graphicPiece0 = new GraphicPiece(Color.color(0.0D, 0.4D, 0.0D));*/
-
-
-        /*GraphicPiece[] graphicPieces = generateTestGraphicPieces(100);
-        for (GraphicPiece graphicPiece: graphicPieces) {
-            graphicPieceDisposer.dispose(graphicTiles, graphicPiece);
-        }*/
-
-
-        //rootChildren.addAll(graphicPieceCorner0, graphicPieceCorner1, graphicPiece0);
-        //rootChildren.addAll(graphicPieces);
-        //drawRectangles(graphicTiles, root.getChildren());
-
-        game = new Game();
+        game = Game.Creator.create();
         game.setText(text);
         GraphicTile[] graphicTiles = generateGraphicTiles();
         graphicPieces = generateGraphicPieces();
-        game.setGameDrawer(new TextGameDrawer(game, null){
+        game.setGameDrawer(new GameDrawer(){
             @Override
             public void drawGame() {
                 for (GraphicPiece graphicPiece: graphicPieces) {
-                    graphicPieceDisposer.dispose(graphicTiles, graphicPiece);
+                    GraphicPieceDisposer.dispose(graphicTiles, graphicPiece);
                 }
                 game.calcGraphicPieces(graphicPieces);
             }
@@ -123,7 +78,7 @@ public class MyApplication extends Application {
         stage.show();
 
         game.draw();
-        game.calcBeforeMove(-1);
+        game.calculateBeforeMove(-1);
 
         //testFinish();
         /*game.setDie(new Die(){

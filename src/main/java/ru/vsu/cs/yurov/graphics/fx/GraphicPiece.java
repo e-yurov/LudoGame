@@ -1,9 +1,5 @@
 package ru.vsu.cs.yurov.graphics.fx;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.control.Button;
-import javafx.scene.image.Image;
 import javafx.scene.paint.*;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
@@ -38,19 +34,19 @@ public class GraphicPiece extends Circle {
             if (piece.canMove() && piece.getPlayer() == game.getPlayers()[game.getCurrentPlayerIndex()]){
                 PieceActionType actionType = game.makeMove(piece);
                 if (actionType == PieceActionType.HIT) {
-                    game.calcBeforeMove(20);
+                    game.calculateBeforeMove(20);
                 } else if (actionType == PieceActionType.FINISH) {
-                    game.calcBeforeMove(10);
+                    game.calculateBeforeMove(10);
                 } else {
                     game.selectNextPlayer();
-                    game.calcBeforeMove(-1);
+                    game.calculateBeforeMove(-1);
                 }
                 game.draw();
             }
 
             if (piece.getPlayer() == game.getPlayers()[game.getCurrentPlayerIndex()] && !piece.getPlayer().canMove()) {
                 game.selectNextPlayer();
-                game.calcBeforeMove(-1);
+                game.calculateBeforeMove(-1);
                 game.draw();
             }
             game.checkWin(stage);
