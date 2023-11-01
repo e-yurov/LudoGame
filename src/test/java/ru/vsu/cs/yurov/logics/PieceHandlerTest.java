@@ -7,7 +7,7 @@ import ru.vsu.cs.yurov.logics.actions.HomeState;
 public class PieceHandlerTest {
     @Test
     void testSix() {
-        PiecesHandler piecesHandler = new PiecesHandler();
+        PieceMoveAbilityComputer pieceMoveAbilityComputer = new PieceMoveAbilityComputer();
         Player player = new Player();
 
         Tile zeroTile = new Tile();
@@ -20,14 +20,14 @@ public class PieceHandlerTest {
         player.tiles = new Tile[]{zeroTile, new Tile(), new Tile(), new Tile(), new Tile(), new Tile(), finalTile};
         player.pieces = new Piece[]{piece};
 
-        piecesHandler.handle(6, player);
+        pieceMoveAbilityComputer.handle(6, player);
 
         Assertions.assertTrue(piece.canMove());
     }
 
     @Test
     void testSixButHasBlockOnEnd() {
-        PiecesHandler piecesHandler = new PiecesHandler();
+        PieceMoveAbilityComputer pieceMoveAbilityComputer = new PieceMoveAbilityComputer();
         Player player = new Player();
 
         Tile zeroTile = new Tile();
@@ -42,14 +42,14 @@ public class PieceHandlerTest {
         player.tiles = new Tile[]{zeroTile, new Tile(), new Tile(), new Tile(), new Tile(), new Tile(), finalTile};
         player.pieces = new Piece[]{piece};
 
-        piecesHandler.handle(6, player);
+        pieceMoveAbilityComputer.handle(6, player);
 
         Assertions.assertFalse(piece.canMove());
     }
 
     @Test
     void testSixAndOnePieceInBlock() {
-        PiecesHandler piecesHandler = new PiecesHandler();
+        PieceMoveAbilityComputer pieceMoveAbilityComputer = new PieceMoveAbilityComputer();
         Player player = new Player();
 
         Tile zeroTile = new Tile();
@@ -70,7 +70,7 @@ public class PieceHandlerTest {
         player.tiles = new Tile[]{zeroTile, firstTile, new Tile(), new Tile(), new Tile(), new Tile(), finalTile, new Tile()};
         player.pieces = new Piece[]{piece1, piece2};
 
-        piecesHandler.handle(6, player);
+        pieceMoveAbilityComputer.handle(6, player);
 
         Assertions.assertTrue(piece1.canMove());
         Assertions.assertFalse(piece2.canMove());
@@ -78,7 +78,7 @@ public class PieceHandlerTest {
 
     @Test
     void testHasBlockOnRoad() {
-        PiecesHandler piecesHandler = new PiecesHandler();
+        PieceMoveAbilityComputer pieceMoveAbilityComputer = new PieceMoveAbilityComputer();
         Player player = new Player();
 
         Tile zeroTile = new Tile();
@@ -93,14 +93,14 @@ public class PieceHandlerTest {
         player.tiles = new Tile[]{zeroTile, new Tile(), new Tile(), blockTile, new Tile(), new Tile()};
         player.pieces = new Piece[]{piece};
 
-        piecesHandler.handle(5, player);
+        pieceMoveAbilityComputer.handle(5, player);
 
         Assertions.assertFalse(piece.canMove());
     }
 
     @Test
     void testOutOfRoad() {
-        PiecesHandler piecesHandler = new PiecesHandler();
+        PieceMoveAbilityComputer pieceMoveAbilityComputer = new PieceMoveAbilityComputer();
         Player player = new Player();
 
         Tile zeroTile = new Tile();
@@ -118,19 +118,19 @@ public class PieceHandlerTest {
         playerTiles[71] = new Tile();
         player.pieces = new Piece[]{piece};
 
-        piecesHandler.handle(1, player);
+        pieceMoveAbilityComputer.handle(1, player);
         Assertions.assertTrue(piece.canMove());
 
-        piecesHandler.handle(2, player);
+        pieceMoveAbilityComputer.handle(2, player);
         Assertions.assertFalse(piece.canMove());
 
-        piecesHandler.handle(6, player);
+        pieceMoveAbilityComputer.handle(6, player);
         Assertions.assertFalse(piece.canMove());
     }
 
     @Test
     void testPiecesCanExitHome() {
-        PiecesHandler piecesHandler = new PiecesHandler();
+        PieceMoveAbilityComputer pieceMoveAbilityComputer = new PieceMoveAbilityComputer();
         Player player = new Player();
 
         Piece piece = new Piece();
@@ -139,16 +139,16 @@ public class PieceHandlerTest {
         player.tiles = new Tile[]{new Tile(), new Tile(), new Tile(), new Tile(), new Tile(), new Tile(), new Tile()};
         player.pieces = new Piece[]{piece};
 
-        piecesHandler.handle(6, player);
+        pieceMoveAbilityComputer.handle(6, player);
         Assertions.assertTrue(piece.canMove());
 
-        piecesHandler.handle(5, player);
+        pieceMoveAbilityComputer.handle(5, player);
         Assertions.assertTrue(piece.canMove());
     }
 
     @Test
     void testCanNotExitHomeAndCanMoveOnBoard() {
-        PiecesHandler piecesHandler = new PiecesHandler();
+        PieceMoveAbilityComputer pieceMoveAbilityComputer = new PieceMoveAbilityComputer();
         Player player = new Player();
 
         Tile zeroTile = new Tile();
@@ -164,14 +164,14 @@ public class PieceHandlerTest {
         player.tiles = new Tile[]{zeroTile, new Tile(), new Tile(), new Tile(), new Tile(), new Tile(), new Tile()};
         player.pieces = new Piece[]{piece1, piece2};
 
-        piecesHandler.handle(5, player);
+        pieceMoveAbilityComputer.handle(5, player);
         Assertions.assertTrue(piece1.canMove());
         Assertions.assertFalse(piece2.canMove());
     }
 
     @Test
     void testBonusMoveWithBlocksOnRoad() {
-        PiecesHandler piecesHandler = new PiecesHandler();
+        PieceMoveAbilityComputer pieceMoveAbilityComputer = new PieceMoveAbilityComputer();
         Player player = new Player();
         Piece piece = new Piece();
         Tile zeroTile = new Tile();
@@ -195,16 +195,16 @@ public class PieceHandlerTest {
         player.setPieces(new Piece[]{piece});
         player.setTiles(playerTiles);
 
-        piecesHandler.handle(10, player);
+        pieceMoveAbilityComputer.handle(10, player);
         Assertions.assertTrue(piece.canMove());
 
-        piecesHandler.handle(20, player);
+        pieceMoveAbilityComputer.handle(20, player);
         Assertions.assertTrue(piece.canMove());
     }
 
     @Test
     void testBonusMoveWithBlocksOnEnd() {
-        PiecesHandler piecesHandler = new PiecesHandler();
+        PieceMoveAbilityComputer pieceMoveAbilityComputer = new PieceMoveAbilityComputer();
         Player player = new Player();
         Piece piece = new Piece();
         Tile zeroTile = new Tile();
@@ -230,10 +230,10 @@ public class PieceHandlerTest {
         player.setPieces(new Piece[]{piece});
         player.setTiles(playerTiles);
 
-        piecesHandler.handle(10, player);
+        pieceMoveAbilityComputer.handle(10, player);
         Assertions.assertFalse(piece.canMove());
 
-        piecesHandler.handle(20, player);
+        pieceMoveAbilityComputer.handle(20, player);
         Assertions.assertFalse(piece.canMove());
     }
 }

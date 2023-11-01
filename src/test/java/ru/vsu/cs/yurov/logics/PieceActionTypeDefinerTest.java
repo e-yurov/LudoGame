@@ -4,18 +4,17 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.vsu.cs.yurov.logics.actions.HomeState;
-import ru.vsu.cs.yurov.logics.actions.piece.PieceAction;
 import ru.vsu.cs.yurov.logics.actions.piece.PieceActionType;
 
-public class PieceMoveHandlerTest {
-    private PieceMoveHandler pieceMoveHandler = new PieceMoveHandler();
+public class PieceActionTypeDefinerTest {
+    private PieceActionTypeDefiner pieceActionTypeDefiner = new PieceActionTypeDefiner();
     private Piece piece;
     private Player player;
     private Tile zeroTile;
 
     @BeforeEach
     void beforeEachTest() {
-        //pieceMoveHandler = new PieceMoveHandler();
+        //pieceActionTypeDefiner = new PieceActionTypeDefiner();
         piece = new Piece();
         piece.setCanMove(true);
         player = new Player();
@@ -26,7 +25,7 @@ public class PieceMoveHandlerTest {
 
     @Test
     void testFinishOnLast() {
-        /*PieceMoveHandler pieceMoveHandler = new PieceMoveHandler();
+        /*PieceActionTypeDefiner pieceActionTypeDefiner = new PieceActionTypeDefiner();
         Piece piece = new Piece();
         Player player = new Player();
         Tile zeroTile = new Tile();*/
@@ -45,12 +44,12 @@ public class PieceMoveHandlerTest {
         player.setTiles(playerTiles);
 
 
-        Assertions.assertEquals(PieceActionType.FINISH, pieceMoveHandler.handle(piece, 1));
+        Assertions.assertEquals(PieceActionType.FINISH, pieceActionTypeDefiner.handle(piece, 1));
     }
 
     @Test
     void testFinish() {
-        /*PieceMoveHandler pieceMoveHandler = new PieceMoveHandler();
+        /*PieceActionTypeDefiner pieceActionTypeDefiner = new PieceActionTypeDefiner();
         Piece piece = new Piece();
         Player player = new Player();
         Tile zeroTile = new Tile();*/
@@ -70,12 +69,12 @@ public class PieceMoveHandlerTest {
 
         player.setTiles(playerTiles);
 
-        Assertions.assertEquals(PieceActionType.FINISH, pieceMoveHandler.handle(piece, 3));
+        Assertions.assertEquals(PieceActionType.FINISH, pieceActionTypeDefiner.handle(piece, 3));
     }
 
     @Test
     void testMoveAndTestHit() {
-        /*PieceMoveHandler pieceMoveHandler = new PieceMoveHandler();
+        /*PieceActionTypeDefiner pieceActionTypeDefiner = new PieceActionTypeDefiner();
         Piece piece = new Piece();
         Player player = new Player();
         Tile zeroTile = new Tile();*/
@@ -94,8 +93,8 @@ public class PieceMoveHandlerTest {
 
         player.setTiles(new Tile[]{zeroTile, new Tile(), new Tile(), finalTile});
 
-        Assertions.assertEquals(PieceActionType.HIT, pieceMoveHandler.handle(piece, 3));
-        Assertions.assertEquals(PieceActionType.MOVE, pieceMoveHandler.handle(piece, 2));
+        Assertions.assertEquals(PieceActionType.HIT, pieceActionTypeDefiner.handle(piece, 3));
+        Assertions.assertEquals(PieceActionType.MOVE, pieceActionTypeDefiner.handle(piece, 2));
     }
 
     @Test
@@ -114,8 +113,8 @@ public class PieceMoveHandlerTest {
 
         player.setTiles(new Tile[]{zeroTile, new Tile(), new Tile(), finalTile});
 
-        Assertions.assertEquals(PieceActionType.MOVE_AND_BLOCK, pieceMoveHandler.handle(piece, 3));
-        Assertions.assertEquals(PieceActionType.MOVE, pieceMoveHandler.handle(piece, 2));
+        Assertions.assertEquals(PieceActionType.MOVE_AND_BLOCK, pieceActionTypeDefiner.handle(piece, 3));
+        Assertions.assertEquals(PieceActionType.MOVE, pieceActionTypeDefiner.handle(piece, 2));
     }
 
     @Test
@@ -130,16 +129,16 @@ public class PieceMoveHandlerTest {
         player.setTiles(new Tile[]{zeroTile, new Tile(), new Tile(), finalTile});
         player.setPieces(new Piece[]{piece});
 
-        PiecesHandler piecesHandler = new PiecesHandler();
-        piecesHandler.handle(3, player);
+        PieceMoveAbilityComputer pieceMoveAbilityComputer = new PieceMoveAbilityComputer();
+        pieceMoveAbilityComputer.handle(3, player);
 
-        Assertions.assertEquals(PieceActionType.DO_NOTHING, pieceMoveHandler.handle(piece, 3));
+        Assertions.assertEquals(PieceActionType.DO_NOTHING, pieceActionTypeDefiner.handle(piece, 3));
     }
 
     @Test
     void testCanLeaveHome() {
         piece.setHomeState(HomeState.IN);
 
-        Assertions.assertEquals(PieceActionType.LEAVE_HOME, pieceMoveHandler.handle(piece, 6));
+        Assertions.assertEquals(PieceActionType.LEAVE_HOME, pieceActionTypeDefiner.handle(piece, 6));
     }
 }

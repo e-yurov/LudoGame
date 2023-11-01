@@ -2,6 +2,7 @@ package ru.vsu.cs.yurov.logics;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import ru.vsu.cs.yurov.graphics.fx.MyApplication;
 import ru.vsu.cs.yurov.logics.actions.HomeState;
 import ru.vsu.cs.yurov.logics.actions.piece.PieceActionReceiver;
 
@@ -71,8 +72,8 @@ public class GameTest {
         game.setPlayers(new Player[]{redPlayer, bluePlayer});
         game.setCurrentPlayerIndex(0);
         game.setNormalTiles(playerTiles);
-        game.setPiecesHandler(new PiecesHandler());
-        game.setPieceMoveHandler(new PieceMoveHandler());
+        game.setPiecesHandler(new PieceMoveAbilityComputer());
+        game.setPieceMoveHandler(new PieceActionTypeDefiner());
         game.setReceiver(new PieceActionReceiver(){
             @Override
             public Piece receive(Player player, int number) {
@@ -89,5 +90,11 @@ public class GameTest {
 
                 () -> Assertions.assertEquals(finalTile, redPiece.getCurrentTile())
         );
+    }
+
+    @Test
+    void test2() {
+        MyApplication application = new MyApplication();
+
     }
 }

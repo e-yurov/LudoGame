@@ -3,17 +3,12 @@ package ru.vsu.cs.yurov.logics;
 import ru.vsu.cs.yurov.logics.actions.HomeState;
 
 public class Player {
-    //Stack<Piece> homePieces;
     Piece[] pieces;
     int sixCounter = 0;
     private PlayerColor color;
 
     Tile[] tiles;
     private Piece lastPiece;
-
-    public void makeMove(int number, Piece piece) {
-
-    }
 
     public void addSixCounter() {
         sixCounter++;

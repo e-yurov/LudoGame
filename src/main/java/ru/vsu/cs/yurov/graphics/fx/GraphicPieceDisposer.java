@@ -1,7 +1,5 @@
 package ru.vsu.cs.yurov.graphics.fx;
 
-import javafx.scene.paint.Color;
-import ru.vsu.cs.yurov.logics.Piece;
 import ru.vsu.cs.yurov.logics.Tile;
 import ru.vsu.cs.yurov.logics.actions.HomeState;
 
@@ -10,6 +8,21 @@ public class GraphicPieceDisposer {
     // short 42
 
     public void dispose(GraphicTile[] tiles, GraphicPiece graphicPiece) {
+        if (graphicPiece.getPiece().hasFinished()) {
+            int x = 450, y = 450, distance = 50;
+            switch (graphicPiece.getPiece().getPlayer().getColor()) {
+                case RED -> y -= distance;
+                case BLUE -> x += distance;
+                case YELLOW -> y += distance;
+                case GREEN -> x -= distance;
+            }
+
+            graphicPiece.setCenterX(x);
+            graphicPiece.setCenterY(y);
+            graphicPiece.setRadius(15D);
+            return;
+        }
+
         if (graphicPiece.getPiece().getHomeState() == HomeState.IN) {
             int x = 0, y = 0;
 
@@ -54,11 +67,11 @@ public class GraphicPieceDisposer {
 
             graphicPiece.setCenterX(x);
             graphicPiece.setCenterY(y);
+            graphicPiece.setRadius(15D);
             return;
         }
         Tile tile = graphicPiece.getPiece().getCurrentTile();
         GraphicTile graphicTile = tiles[tile.getIndex()];
-        //GraphicTile graphicTile = calculateTile(tiles, index);
 
         switch (graphicTile.getForm()) {
             case HORIZONTAL -> {

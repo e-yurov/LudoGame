@@ -7,8 +7,8 @@ import ru.vsu.cs.yurov.logics.*;
 import ru.vsu.cs.yurov.logics.actions.HomeState;
 
 public class PieceActionTest {
-    PiecesHandler piecesHandler = new PiecesHandler();
-    PieceMoveHandler pieceMoveHandler = new PieceMoveHandler();
+    PieceMoveAbilityComputer pieceMoveAbilityComputer = new PieceMoveAbilityComputer();
+    PieceActionTypeDefiner pieceActionTypeDefiner = new PieceActionTypeDefiner();
 
     Piece piece;
     Player player;
@@ -34,8 +34,8 @@ public class PieceActionTest {
         player.setPieces(new Piece[]{piece});
         player.setTiles(new Tile[]{startTile, new Tile(), new Tile(), finalTile});
 
-        piecesHandler.handle(3, player);
-        PieceActionType actionType = pieceMoveHandler.handle(piece, 3);
+        pieceMoveAbilityComputer.handle(3, player);
+        PieceActionType actionType = pieceActionTypeDefiner.handle(piece, 3);
         actionType.getAction().perform(piece, 3);
 
         Assertions.assertAll(
@@ -63,8 +63,8 @@ public class PieceActionTest {
         player.setPieces(new Piece[]{piece, friendlyPiece});
         player.setTiles(new Tile[]{startTile, new Tile(), new Tile(), finalTile, new Tile(), new Tile(), new Tile()});
 
-        piecesHandler.handle(3, player);
-        PieceActionType actionType = pieceMoveHandler.handle(piece, 3);
+        pieceMoveAbilityComputer.handle(3, player);
+        PieceActionType actionType = pieceActionTypeDefiner.handle(piece, 3);
         actionType.getAction().perform(piece, 3);
 
         Assertions.assertAll(
@@ -101,8 +101,8 @@ public class PieceActionTest {
         enemyPlayer.setPieces(new Piece[]{enemyPiece});
         enemyPlayer.setTiles(new Tile[]{finalTile});
 
-        piecesHandler.handle(3, player);
-        PieceActionType actionType = pieceMoveHandler.handle(piece, 3);
+        pieceMoveAbilityComputer.handle(3, player);
+        PieceActionType actionType = pieceActionTypeDefiner.handle(piece, 3);
         actionType.getAction().perform(piece, 3);
 
         Assertions.assertAll(
@@ -141,8 +141,8 @@ public class PieceActionTest {
         enemyPlayer.setTiles(new Tile[]{finalTile});
         enemyPlayer.setColor(PlayerColor.BLUE);
 
-        piecesHandler.handle(3, player);
-        PieceActionType actionType = pieceMoveHandler.handle(piece, 3);
+        pieceMoveAbilityComputer.handle(3, player);
+        PieceActionType actionType = pieceActionTypeDefiner.handle(piece, 3);
         actionType.getAction().perform(piece, 3);
 
         Assertions.assertAll(
@@ -177,8 +177,8 @@ public class PieceActionTest {
         player.setPieces(new Piece[]{piece});
         player.setTiles(playerTiles);
 
-        piecesHandler.handle(1, player);
-        PieceActionType actionType = pieceMoveHandler.handle(piece, 1);
+        pieceMoveAbilityComputer.handle(1, player);
+        PieceActionType actionType = pieceActionTypeDefiner.handle(piece, 1);
         actionType.getAction().perform(piece, 1);
 
         Assertions.assertAll(
@@ -198,8 +198,8 @@ public class PieceActionTest {
         player.setPieces(new Piece[]{piece});
         player.setTiles(new Tile[]{startTile, new Tile(), new Tile(), finalTile});
 
-        piecesHandler.handle(6, player);
-        PieceActionType actionType = pieceMoveHandler.handle(piece, 6);
+        pieceMoveAbilityComputer.handle(6, player);
+        PieceActionType actionType = pieceActionTypeDefiner.handle(piece, 6);
         actionType.getAction().perform(piece, 6);
 
         Assertions.assertAll(
