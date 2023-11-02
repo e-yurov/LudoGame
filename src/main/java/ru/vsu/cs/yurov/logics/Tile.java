@@ -49,9 +49,15 @@ public class Tile {
     public void removePiece(Piece piece) {
         if (piece == firstPiece) {
             firstPiece = secondPiece;
-            secondPiece = null;
-        } else if (piece == secondPiece) {
-            secondPiece = null;
+        }
+        secondPiece = null;
+    }
+
+    public void setPiece(Piece piece) {
+        if (firstPiece == null) {
+            firstPiece = piece;
+        } else if (secondPiece == null) {
+            secondPiece = piece;
         }
     }
 }

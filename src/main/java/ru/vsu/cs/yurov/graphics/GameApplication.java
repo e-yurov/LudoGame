@@ -16,6 +16,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import ru.vsu.cs.yurov.logics.*;
+import ru.vsu.cs.yurov.logics.actions.HomeState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,7 @@ public class GameApplication extends Application {
     private Stage stage;
 
     private GraphicPiece[] testGraphicPieces;
+    private Text sixesInRowText;
     @Override
     public void start(Stage stage) {
         this.stage = stage;
@@ -42,35 +44,37 @@ public class GameApplication extends Application {
         view.setFitWidth(BOARD_SIZE);
         view.setFitHeight(BOARD_SIZE);
 
-        Text text = new Text();
-        text.setX(930);
-        text.setY(30);
+        Text dieNumberText = new Text();
+        dieNumberText.setFont(Font.font(20D));
+        dieNumberText.setX(930);
+        dieNumberText.setY(20);
+
+        sixesInRowText = new Text();
+        sixesInRowText.setFont(Font.font(20D));
+        sixesInRowText.setX(930);
+        sixesInRowText.setY(100);
+
 
         game = Game.Creator.create();
-        game.setText(text);
+        game.setText(dieNumberText);
+
         graphicTiles = GraphicComponentsGenerator.generateGraphicTiles();
         graphicPieces = GraphicComponentsGenerator.generateGraphicPieces(game.getPieces(), this);
 
-        //testGraphicPieces = generateTestGraphicPieces(100);
-
-        rootChildren.addAll(view);
-        rootChildren.addAll(text);
+        rootChildren.addAll(view, dieNumberText, sixesInRowText);
         rootChildren.addAll(graphicPieces);
         rootChildren.addAll(GraphicComponentsGenerator.generatePlayersText(game.getPlayers()));
-
-        rootChildren.addAll(generateTestGraphicPieces(100));
 
         Scene scene = new Scene(root, 1600, 900);
         stage.setTitle("Hello!");
         stage.setScene(scene);
         stage.show();
 
-        drawGame();
         game.calculateBeforeMove(-1);
+        drawGame();
 
-        //testFinish();
-        //System.out.printf("Long=%d, short=%d", TILE_LONG_SIDE, TILE_SHORT_SIDE);
-
+        //enableTestFinish();
+        //enableTestSixes();
     }
 
     public void drawGame() {
@@ -104,8 +108,30 @@ public class GameApplication extends Application {
         popupStage.setOnCloseRequest(windowEvent -> closeButton.fire());
     }
 
-    void handlePieceClick(Piece piece) {
-        if (piece.canMove() && piece.getPlayer() == game.currentPlayer()){
+    void handleGraphicPieceClick(Piece piece) {
+        Player player = piece.getPlayer();
+        if (player.getSixCounter() == 3) {
+            if (player.getLastPiece().isOnColorTile()) {
+                sixesInRowText.setText("Three \"6\" in a row!\nLast piece was returned to the color road's beginning");
+            } else {
+                sixesInRowText.setText("Three \"6\" in a row!\nLast piece was killed :(");
+            }
+
+            player.setSixCounter(0);
+            if (!piece.getCurrentTile().isSafe()) {
+                player.getLastPiece().kill();
+            } else {
+                sixesInRowText.setText("Three \"6\" in a row!\nFortunately, last piece was on the safe tile :)");
+            }
+
+            game.selectNextPlayer();
+            game.calculateBeforeMove(-1);
+            drawGame();
+            return;
+        }
+        sixesInRowText.setText(null);
+
+        if (piece.canMove() && player == game.currentPlayer()){
             int moveNumber = game.makeMove(piece);
             if (moveNumber < 0) {
                 game.selectNextPlayer();
@@ -113,8 +139,7 @@ public class GameApplication extends Application {
             game.calculateBeforeMove(moveNumber);
             drawGame();
         }
-
-        if (piece.getPlayer() == game.currentPlayer() && !piece.getPlayer().canMove()) {
+        if (player == game.currentPlayer() && !player.canMove()) {
             game.selectNextPlayer();
             game.calculateBeforeMove(-1);
             drawGame();
@@ -126,7 +151,7 @@ public class GameApplication extends Application {
         launch();
     }
 
-    public void testFinish() {
+    public void enableTestFinish() {
         Player[] players = game.getPlayers();
         for (int i = 0; i < players.length; i++) {
             Player player = players[i];
@@ -134,6 +159,39 @@ public class GameApplication extends Application {
                 piece.setHasFinished(true);
             }
         }
+    }
+
+    public void enableTestSixes() {
+        Player player = game.getPlayers()[0];
+
+        Piece piece0 = player.getPieces()[0];
+        Piece piece1 = player.getPieces()[1];
+        Piece piece2 = player.getPieces()[2];
+        Piece piece3 = player.getPieces()[3];
+
+        piece0.setTilesPassed(64);
+        piece0.setCurrentTile(player.getTiles()[64]);
+        player.getTiles()[64].setPiece(piece0);
+        player.setLastPiece(piece0);
+
+        piece1.setHomeState(HomeState.OUT);
+        piece1.setTilesPassed(0);
+        piece1.setCurrentTile(player.getTiles()[0]);
+
+        piece2.setHomeState(HomeState.OUT);
+        piece2.setTilesPassed(0);
+        piece2.setCurrentTile(player.getTiles()[0]);
+
+        piece3.setHomeState(HomeState.OUT);
+        piece3.setTilesPassed(0);
+        piece3.setCurrentTile(player.getTiles()[0]);
+
+        game.setDie(new Die(){
+            @Override
+            public int getNumber() {
+                return 6;
+            }
+        });
     }
 
     public GraphicPiece[] generateTestGraphicPieces(int size) {

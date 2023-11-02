@@ -16,7 +16,7 @@ public class GraphicPiece extends Circle {
         setCenterY(-100);
         setRadius(15);
 
-        setOnMouseClicked(mouseEvent -> application.handlePieceClick(piece));
+        setOnMouseClicked(mouseEvent -> application.handleGraphicPieceClick(piece));
     }
 
     public Piece getPiece() {

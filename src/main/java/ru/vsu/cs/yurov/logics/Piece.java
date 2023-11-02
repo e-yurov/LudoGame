@@ -5,8 +5,8 @@ import ru.vsu.cs.yurov.logics.actions.HomeState;
 public class Piece {
     public static final int TILES_COUNT = 72;
     public static final int COLORED_TILES_COUNT = 8;
+
     private Tile currentTile;
-    private boolean isOnColorTrack;
     private boolean canMove;
     private HomeState homeState = HomeState.OUT;
     private int tilesPassed = -1;
@@ -14,6 +14,28 @@ public class Piece {
     private boolean hasFinished = false;
 
     private int index;
+
+    public void kill() {
+        currentTile.removePiece(this);
+
+        if (isOnColorTile()) {
+            tilesPassed = Game.PIECE_NORMAL_TILES_COUNT;
+
+            Tile colorBeginningTile = player.getTiles()[Game.PIECE_NORMAL_TILES_COUNT];
+            //currentTile.setPiece(this);
+            currentTile = colorBeginningTile;
+            colorBeginningTile.setPiece(this);
+            return;
+        }
+
+        tilesPassed = -1;
+        currentTile = null;
+        homeState = HomeState.IN;
+    }
+
+    public boolean isOnColorTile() {
+        return currentTile.getIndex() >= Game.PIECE_NORMAL_TILES_COUNT;
+    }
 
     public Tile getNextTile(int number) {
         return this.getPlayer().getTiles()[tilesPassed + number];
@@ -65,14 +87,6 @@ public class Piece {
 
     public void setHasFinished(boolean hasFinished) {
         this.hasFinished = hasFinished;
-    }
-
-    public void bust() {
-        currentTile.removePiece(this);
-        tilesPassed = -1;
-        currentTile = null;
-        homeState = HomeState.IN;
-        player.setSixCounter(0);
     }
 
     public int getIndex() {

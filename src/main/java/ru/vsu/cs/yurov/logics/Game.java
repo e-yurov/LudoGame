@@ -1,18 +1,17 @@
 package ru.vsu.cs.yurov.logics;
 
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import ru.vsu.cs.yurov.logics.actions.HomeState;
 import ru.vsu.cs.yurov.logics.actions.piece.PieceActionType;
 
 import java.util.*;
 
 public class Game {
+    public static final int NORMAL_TILES_COUNT = 68;
+    public static final int COLOR_ROAD_TILES_COUNT = 8;
+
+    public static final int PIECE_NORMAL_TILES_COUNT = 64;
+
     private Player[] players;
     private int currentPlayerIndex;
     private Die die;
@@ -54,14 +53,19 @@ public class Game {
     public void calculateBeforeMove(int bonusNumber) {
         Player player = players[currentPlayerIndex];
         currentNumber = bonusNumber <= 0 ? die.getNumber() : bonusNumber;
-        if (currentNumber == 6 && player.getSixCounter() == 2) {
-            player.getLastPiece().bust();
+        if (currentNumber == 6) {
+            /*if (player.getSixCounter() == 2) {
+                player.getLastPiece().kill();
+                player.setSixCounter(0);
+                selectNextPlayer();
+                return;
+            }*/
+
+            if (player.isAllOut()) {
+                currentNumber++;
+            }
         }
         PieceMoveAbilityComputer.compute(player, currentNumber);
-
-        /*if (!player.canMove()) {
-            return;
-        }*/
 
         if (currentNumber <= 6) {
             text.setText("Die roll: " + currentNumber + "\nPlayer " + player.getColor());
@@ -72,6 +76,11 @@ public class Game {
 
     public int makeMove(Piece piece) {
         Player player = players[currentPlayerIndex];
+        /*if (player.getSixCounter() == 2) {
+            player.setSixCounter(0);
+            player.getLastPiece().kill();
+            return -1;
+        }*/
 
         player.setLastPiece(piece);
         PieceActionType actionType = PieceActionTypeDefiner.defineAction(piece, currentNumber);
@@ -83,13 +92,14 @@ public class Game {
         if (actionType == PieceActionType.FINISH) {
             return 10;
         }
-        if (currentNumber == 6) {
+        if (currentNumber == 6 || currentNumber == 7) {
             return 0;
         }
         return -1;
     }
 
     public void selectNextPlayer() {
+        currentPlayer().setSixCounter(0);
         currentPlayerIndex++;
         currentPlayerIndex %= players.length;
     }

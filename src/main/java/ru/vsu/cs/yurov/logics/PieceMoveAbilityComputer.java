@@ -6,7 +6,7 @@ public class PieceMoveAbilityComputer {
     private PieceMoveAbilityComputer() {}
 
     public static void compute(Player player, int number) {
-        if (number == 6) {
+        if (number == 6 || number == 7) {
             player.addSixCounter();
 
             boolean isAllOut = true;

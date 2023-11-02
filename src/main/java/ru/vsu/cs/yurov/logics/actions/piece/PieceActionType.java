@@ -20,9 +20,10 @@ public enum PieceActionType {
     HIT((piece, number) -> {
                 Tile nextTile = piece.getNextTile(number);
                 Piece enemyPiece = nextTile.getFirstPiece();
-                enemyPiece.setHomeState(HomeState.IN);
+                /*enemyPiece.setHomeState(HomeState.IN);
                 enemyPiece.setTilesPassed(-1);
-                enemyPiece.setCurrentTile(null);
+                enemyPiece.setCurrentTile(null);*/
+                enemyPiece.kill();
 
                 nextTile.setFirstPiece(piece);
 

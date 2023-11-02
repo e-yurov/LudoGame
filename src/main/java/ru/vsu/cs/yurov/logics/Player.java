@@ -41,6 +41,15 @@ public class Player {
         sixCounter++;
     }
 
+    public boolean isAllOut() {
+        boolean result = true;
+        for (Piece piece: pieces) {
+            result &= piece.getHomeState() == HomeState.OUT;
+        }
+
+        return result;
+    }
+
 
     public Piece[] getPieces() {
         return pieces;
