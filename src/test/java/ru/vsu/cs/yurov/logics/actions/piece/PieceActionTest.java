@@ -1,5 +1,6 @@
 package ru.vsu.cs.yurov.logics.actions.piece;
 
+import javafx.scene.text.Text;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -176,6 +177,7 @@ public class PieceActionTest {
 
         player.setPieces(new Piece[]{piece});
         player.setTiles(playerTiles);
+        player.setTextFinishedPiecesCounter(new Text());
 
         pieceMoveAbilityComputer.compute(1, player);
         PieceActionType actionType = pieceActionTypeDefiner.defineAction(piece, 1);
@@ -186,7 +188,8 @@ public class PieceActionTest {
                 () -> Assertions.assertNull(startTile.getSecondPiece()),
                 () -> Assertions.assertEquals(PieceActionType.FINISH, actionType),
                 //() -> Assertions.assertEquals(piece, finalTile.getFirstPiece()),
-                () -> Assertions.assertEquals(Piece.TILES_COUNT - 1, piece.getTilesPassed())
+                () -> Assertions.assertEquals(Piece.TILES_COUNT - 1, piece.getTilesPassed()),
+                () -> Assertions.assertEquals(1, player.getFinishedPiecesCounter())
         );
     }
 

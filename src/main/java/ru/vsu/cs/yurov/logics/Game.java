@@ -208,35 +208,6 @@ public class Game {
         this.die = die;
     }
 
-    public void setPieceMoveHandler(PieceActionTypeDefiner pieceActionTypeDefiner) {
-        this.pieceActionTypeDefiner = pieceActionTypeDefiner;
-    }
-
-    public void setPiecesHandler(PieceMoveAbilityComputer pieceMoveAbilityComputer) {
-        this.pieceMoveAbilityComputer = pieceMoveAbilityComputer;
-    }
-
-    public void setNormalTiles(Tile[] normalTiles) {
-        this.normalTiles = normalTiles;
-    }
-
-    public void setRedTiles(Tile[] redTiles) {
-        this.redTiles = redTiles;
-    }
-
-    public void setBlueTiles(Tile[] blueTiles) {
-        this.blueTiles = blueTiles;
-    }
-
-    public void setYellowTiles(Tile[] yellowTiles) {
-        this.yellowTiles = yellowTiles;
-    }
-
-    public void setGreenTiles(Tile[] greenTiles) {
-        this.greenTiles = greenTiles;
-    }
-
-
     public Player[] getPlayers() {
         return players;
     }

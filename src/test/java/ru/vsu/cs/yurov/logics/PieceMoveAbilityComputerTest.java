@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import ru.vsu.cs.yurov.logics.actions.HomeState;
 
-public class PieceHandlerTest {
+public class PieceMoveAbilityComputerTest {
     @Test
     void testSix() {
         PieceMoveAbilityComputer pieceMoveAbilityComputer = new PieceMoveAbilityComputer();
