@@ -7,7 +7,6 @@ import ru.vsu.cs.yurov.logics.actions.HomeState;
 import ru.vsu.cs.yurov.logics.actions.piece.PieceActionType;
 
 public class PieceActionTypeDefinerTest {
-    private PieceActionTypeDefiner pieceActionTypeDefiner = new PieceActionTypeDefiner();
     private Piece piece;
     private Player player;
     private Tile zeroTile;
@@ -44,7 +43,7 @@ public class PieceActionTypeDefinerTest {
         player.setTiles(playerTiles);
 
 
-        Assertions.assertEquals(PieceActionType.FINISH, pieceActionTypeDefiner.defineAction(piece, 1));
+        Assertions.assertEquals(PieceActionType.FINISH, PieceActionTypeDefiner.defineAction(piece, 1));
     }
 
     @Test
@@ -69,7 +68,7 @@ public class PieceActionTypeDefinerTest {
 
         player.setTiles(playerTiles);
 
-        Assertions.assertEquals(PieceActionType.FINISH, pieceActionTypeDefiner.defineAction(piece, 3));
+        Assertions.assertEquals(PieceActionType.FINISH, PieceActionTypeDefiner.defineAction(piece, 3));
     }
 
     @Test
@@ -93,8 +92,8 @@ public class PieceActionTypeDefinerTest {
 
         player.setTiles(new Tile[]{zeroTile, new Tile(), new Tile(), finalTile});
 
-        Assertions.assertEquals(PieceActionType.HIT, pieceActionTypeDefiner.defineAction(piece, 3));
-        Assertions.assertEquals(PieceActionType.MOVE, pieceActionTypeDefiner.defineAction(piece, 2));
+        Assertions.assertEquals(PieceActionType.HIT, PieceActionTypeDefiner.defineAction(piece, 3));
+        Assertions.assertEquals(PieceActionType.MOVE, PieceActionTypeDefiner.defineAction(piece, 2));
     }
 
     @Test
@@ -113,8 +112,8 @@ public class PieceActionTypeDefinerTest {
 
         player.setTiles(new Tile[]{zeroTile, new Tile(), new Tile(), finalTile});
 
-        Assertions.assertEquals(PieceActionType.MOVE_AND_BLOCK, pieceActionTypeDefiner.defineAction(piece, 3));
-        Assertions.assertEquals(PieceActionType.MOVE, pieceActionTypeDefiner.defineAction(piece, 2));
+        Assertions.assertEquals(PieceActionType.MOVE_AND_BLOCK, PieceActionTypeDefiner.defineAction(piece, 3));
+        Assertions.assertEquals(PieceActionType.MOVE, PieceActionTypeDefiner.defineAction(piece, 2));
     }
 
     @Test
@@ -129,16 +128,15 @@ public class PieceActionTypeDefinerTest {
         player.setTiles(new Tile[]{zeroTile, new Tile(), new Tile(), finalTile});
         player.setPieces(new Piece[]{piece});
 
-        PieceMoveAbilityComputer pieceMoveAbilityComputer = new PieceMoveAbilityComputer();
-        pieceMoveAbilityComputer.compute(3, player);
+        PieceMoveAbilityComputer.compute(player, 3);
 
-        Assertions.assertEquals(PieceActionType.DO_NOTHING, pieceActionTypeDefiner.defineAction(piece, 3));
+        Assertions.assertEquals(PieceActionType.DO_NOTHING, PieceActionTypeDefiner.defineAction(piece, 3));
     }
 
     @Test
     void testCanLeaveHome() {
         piece.setHomeState(HomeState.IN);
 
-        Assertions.assertEquals(PieceActionType.LEAVE_HOME, pieceActionTypeDefiner.defineAction(piece, 6));
+        Assertions.assertEquals(PieceActionType.LEAVE_HOME, PieceActionTypeDefiner.defineAction(piece, 6));
     }
 }

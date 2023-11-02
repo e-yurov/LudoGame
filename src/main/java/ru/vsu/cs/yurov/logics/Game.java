@@ -8,7 +8,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import ru.vsu.cs.yurov.logics.actions.HomeState;
-import ru.vsu.cs.yurov.logics.actions.piece.PieceActionReceiver;
 import ru.vsu.cs.yurov.logics.actions.piece.PieceActionType;
 
 import java.util.*;
@@ -18,7 +17,6 @@ public class Game {
     private int currentPlayerIndex;
     private Die die;
 
-    private PieceActionTypeDefiner pieceActionTypeDefiner;
     private PieceMoveAbilityComputer pieceMoveAbilityComputer;
 
     private Tile[] normalTiles;
@@ -34,8 +32,6 @@ public class Game {
         players = new Player[4];
         currentPlayerIndex = 0;
         die = new Die();
-        pieceActionTypeDefiner = new PieceActionTypeDefiner();
-        pieceMoveAbilityComputer = new PieceMoveAbilityComputer();
         normalTiles = new Tile[68];
         redTiles = new Tile[Piece.COLORED_TILES_COUNT];
         blueTiles = new Tile[Piece.COLORED_TILES_COUNT];
@@ -61,7 +57,7 @@ public class Game {
         if (currentNumber == 6 && player.getSixCounter() == 2) {
             player.getLastPiece().bust();
         }
-        pieceMoveAbilityComputer.compute(currentNumber, player);
+        PieceMoveAbilityComputer.compute(player, currentNumber);
 
         /*if (!player.canMove()) {
             return;
@@ -78,7 +74,7 @@ public class Game {
         Player player = players[currentPlayerIndex];
 
         player.setLastPiece(piece);
-        PieceActionType actionType = pieceActionTypeDefiner.defineAction(piece, currentNumber);
+        PieceActionType actionType = PieceActionTypeDefiner.defineAction(piece, currentNumber);
         actionType.getAction().perform(piece, currentNumber);
 
         if (actionType == PieceActionType.HIT) {
@@ -218,10 +214,6 @@ public class Game {
 
     public Die getDie() {
         return die;
-    }
-
-    public PieceActionTypeDefiner getPieceMoveHandler() {
-        return pieceActionTypeDefiner;
     }
 
     public PieceMoveAbilityComputer getPiecesHandler() {

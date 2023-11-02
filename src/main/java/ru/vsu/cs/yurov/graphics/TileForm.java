@@ -1,4 +1,4 @@
-package ru.vsu.cs.yurov.graphics.fx;
+package ru.vsu.cs.yurov.graphics;
 
 public enum TileForm {
     HORIZONTAL,

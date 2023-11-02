@@ -1,4 +1,4 @@
-package ru.vsu.cs.yurov.graphics.fx;
+package ru.vsu.cs.yurov.graphics;
 
 import javafx.application.Application;
 import javafx.collections.ObservableList;
@@ -22,9 +22,7 @@ import java.util.List;
 import java.util.Random;
 
 public class GameApplication extends Application {
-    public static final int BOARD_SIZE = 900;
-    public static final int TILE_LONG_SIDE = (int) Math.round(220 * ((double)BOARD_SIZE / 2048));
-    public static final int TILE_SHORT_SIDE = (int) Math.round(96 * ((double)BOARD_SIZE / 2048));
+    static final int BOARD_SIZE = 900;
 
     private Game game;
     private GraphicPiece[] graphicPieces;
@@ -32,7 +30,7 @@ public class GameApplication extends Application {
 
     private Stage stage;
 
-    private  GraphicPiece[] testGraphicPieces;
+    private GraphicPiece[] testGraphicPieces;
     @Override
     public void start(Stage stage) {
         this.stage = stage;
@@ -50,7 +48,7 @@ public class GameApplication extends Application {
 
         game = Game.Creator.create();
         game.setText(text);
-        graphicTiles = GraphicComponentsGenerator.generateGraphicTiles(TILE_SHORT_SIDE, TILE_LONG_SIDE);
+        graphicTiles = GraphicComponentsGenerator.generateGraphicTiles();
         graphicPieces = GraphicComponentsGenerator.generateGraphicPieces(game.getPieces(), this);
 
         //testGraphicPieces = generateTestGraphicPieces(100);
@@ -71,7 +69,7 @@ public class GameApplication extends Application {
         game.calculateBeforeMove(-1);
 
         //testFinish();
-        System.out.printf("Long=%d, short=%d", TILE_LONG_SIDE, TILE_SHORT_SIDE);
+        //System.out.printf("Long=%d, short=%d", TILE_LONG_SIDE, TILE_SHORT_SIDE);
 
     }
 

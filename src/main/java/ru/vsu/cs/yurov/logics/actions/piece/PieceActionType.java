@@ -10,17 +10,6 @@ public enum PieceActionType {
                 nextTile.setFirstPiece(piece);
 
                 leaveCurrentTile(piece, number);
-                /*if (currentTile.isFull()) {
-                    if (currentTile.getFirstPiece() == piece) {
-                        currentTile.setFirstPiece(currentTile.getSecondPiece());
-                    }
-                    currentTile.setSecondPiece(null);
-                } else {
-                    currentTile.setFirstPiece(null);
-                }
-
-                piece.setTilesPassed(piece.getTilesPassed() + number);
-                piece.setCurrentTile(nextTile);*/
     }),
     MOVE_AND_BLOCK((piece, number) -> {
                 Tile nextTile = piece.getNextTile(number);

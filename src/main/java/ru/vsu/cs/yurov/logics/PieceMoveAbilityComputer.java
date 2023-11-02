@@ -3,7 +3,9 @@ package ru.vsu.cs.yurov.logics;
 import ru.vsu.cs.yurov.logics.actions.HomeState;
 
 public class PieceMoveAbilityComputer {
-    public void compute(int number, Player player) {
+    private PieceMoveAbilityComputer() {}
+
+    public static void compute(Player player, int number) {
         if (number == 6) {
             player.addSixCounter();
 
@@ -26,7 +28,7 @@ public class PieceMoveAbilityComputer {
                                 piece.getTilesPassed() + number < Piece.TILES_COUNT &&
                                 !player.tiles[piece.getTilesPassed() + number].isFull());
                     } else {
-                        piece.setCanMove(checkTile(number, piece, player));
+                        piece.setCanMove(checkTile(player, piece, number));
                     }
                 }
             }
@@ -38,13 +40,13 @@ public class PieceMoveAbilityComputer {
             if (piece.getHomeState() == HomeState.IN) {
                 piece.setCanMove(number >= 5 && !player.tiles[0].isFull());
             } else {
-                piece.setCanMove(checkTile(number, piece, player));
+                piece.setCanMove(checkTile(player, piece, number));
             }
         }
 
     }
 
-    private boolean checkTile(int number, Piece piece, Player player) {
+    private static boolean checkTile(Player player, Piece piece, int number) {
         int tilesPassed = piece.getTilesPassed();
 
         int nextTileIndex = tilesPassed + number;

@@ -8,13 +8,10 @@ import ru.vsu.cs.yurov.logics.*;
 import ru.vsu.cs.yurov.logics.actions.HomeState;
 
 public class PieceActionTest {
-    PieceMoveAbilityComputer pieceMoveAbilityComputer = new PieceMoveAbilityComputer();
-    PieceActionTypeDefiner pieceActionTypeDefiner = new PieceActionTypeDefiner();
-
-    Piece piece;
-    Player player;
-    Tile startTile;
-    Tile finalTile;
+    private Piece piece;
+    private Player player;
+    private Tile startTile;
+    private Tile finalTile;
 
     @BeforeEach
     void beforeEach() {
@@ -35,8 +32,8 @@ public class PieceActionTest {
         player.setPieces(new Piece[]{piece});
         player.setTiles(new Tile[]{startTile, new Tile(), new Tile(), finalTile});
 
-        pieceMoveAbilityComputer.compute(3, player);
-        PieceActionType actionType = pieceActionTypeDefiner.defineAction(piece, 3);
+        PieceMoveAbilityComputer.compute(player, 3);
+        PieceActionType actionType = PieceActionTypeDefiner.defineAction(piece, 3);
         actionType.getAction().perform(piece, 3);
 
         Assertions.assertAll(
@@ -64,8 +61,8 @@ public class PieceActionTest {
         player.setPieces(new Piece[]{piece, friendlyPiece});
         player.setTiles(new Tile[]{startTile, new Tile(), new Tile(), finalTile, new Tile(), new Tile(), new Tile()});
 
-        pieceMoveAbilityComputer.compute(3, player);
-        PieceActionType actionType = pieceActionTypeDefiner.defineAction(piece, 3);
+        PieceMoveAbilityComputer.compute(player, 3);
+        PieceActionType actionType = PieceActionTypeDefiner.defineAction(piece, 3);
         actionType.getAction().perform(piece, 3);
 
         Assertions.assertAll(
@@ -102,8 +99,8 @@ public class PieceActionTest {
         enemyPlayer.setPieces(new Piece[]{enemyPiece});
         enemyPlayer.setTiles(new Tile[]{finalTile});
 
-        pieceMoveAbilityComputer.compute(3, player);
-        PieceActionType actionType = pieceActionTypeDefiner.defineAction(piece, 3);
+        PieceMoveAbilityComputer.compute(player, 3);
+        PieceActionType actionType = PieceActionTypeDefiner.defineAction(piece, 3);
         actionType.getAction().perform(piece, 3);
 
         Assertions.assertAll(
@@ -142,8 +139,8 @@ public class PieceActionTest {
         enemyPlayer.setTiles(new Tile[]{finalTile});
         enemyPlayer.setColor(PlayerColor.BLUE);
 
-        pieceMoveAbilityComputer.compute(3, player);
-        PieceActionType actionType = pieceActionTypeDefiner.defineAction(piece, 3);
+        PieceMoveAbilityComputer.compute(player, 3);
+        PieceActionType actionType = PieceActionTypeDefiner.defineAction(piece, 3);
         actionType.getAction().perform(piece, 3);
 
         Assertions.assertAll(
@@ -179,15 +176,14 @@ public class PieceActionTest {
         player.setTiles(playerTiles);
         player.setTextFinishedPiecesCounter(new Text());
 
-        pieceMoveAbilityComputer.compute(1, player);
-        PieceActionType actionType = pieceActionTypeDefiner.defineAction(piece, 1);
+        PieceMoveAbilityComputer.compute(player, 1);
+        PieceActionType actionType = PieceActionTypeDefiner.defineAction(piece, 1);
         actionType.getAction().perform(piece, 1);
 
         Assertions.assertAll(
                 () -> Assertions.assertEquals(friendlyPiece, startTile.getFirstPiece()),
                 () -> Assertions.assertNull(startTile.getSecondPiece()),
                 () -> Assertions.assertEquals(PieceActionType.FINISH, actionType),
-                //() -> Assertions.assertEquals(piece, finalTile.getFirstPiece()),
                 () -> Assertions.assertEquals(Piece.TILES_COUNT - 1, piece.getTilesPassed()),
                 () -> Assertions.assertEquals(1, player.getFinishedPiecesCounter())
         );
@@ -201,8 +197,8 @@ public class PieceActionTest {
         player.setPieces(new Piece[]{piece});
         player.setTiles(new Tile[]{startTile, new Tile(), new Tile(), finalTile});
 
-        pieceMoveAbilityComputer.compute(6, player);
-        PieceActionType actionType = pieceActionTypeDefiner.defineAction(piece, 6);
+        PieceMoveAbilityComputer.compute(player, 6);
+        PieceActionType actionType = PieceActionTypeDefiner.defineAction(piece, 6);
         actionType.getAction().perform(piece, 6);
 
         Assertions.assertAll(
