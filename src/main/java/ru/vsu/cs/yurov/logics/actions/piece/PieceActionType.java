@@ -41,6 +41,7 @@ public enum PieceActionType {
     }),
     FINISH((piece, number) -> {
                 piece.setHasFinished(true);
+                piece.getPlayer().addFinishedPiecesCounter();
 
                 leaveCurrentTile(piece, number);
     }),

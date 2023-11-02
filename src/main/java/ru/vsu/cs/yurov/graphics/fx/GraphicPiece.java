@@ -32,15 +32,15 @@ public class GraphicPiece extends Circle {
         setOnMouseClicked(mouseEvent -> {
             //game.setSelectedPiece(piece.canMove() ? piece : null);
             if (piece.canMove() && piece.getPlayer() == game.currentPlayer()){
-                PieceActionType actionType = game.makeMove(piece);
-                if (actionType == PieceActionType.HIT) {
-                    game.calculateBeforeMove(20);
-                } else if (actionType == PieceActionType.FINISH) {
-                    game.calculateBeforeMove(10);
-                } else {
+                int moveNumber = game.makeMove(piece);
+
+                if (moveNumber < 0) {
                     game.selectNextPlayer();
-                    game.calculateBeforeMove(-1);
                 }
+
+                game.calculateBeforeMove(moveNumber);
+
+
                 //gameDrawer.drawGame(game.currentPlayer());
                 application.drawGame();
             }

@@ -32,13 +32,6 @@ public class MyApplication extends Application {
     private GraphicPiece[] graphicPieces;
     private GraphicTile[] graphicTiles;
 
-    private PieceActionReceiver receiver = new PieceActionReceiver(){
-        @Override
-        public Piece receive(Player player, int number) {
-            return graphicPieces[0].getPiece();
-        }
-    };
-
     private Stage stage;
     @Override
     public void start(Stage stage) {
@@ -69,11 +62,13 @@ public class MyApplication extends Application {
             }
         });*/
         //game.setGameDrawer();
-        game.setReceiver(receiver);
 
         rootChildren.addAll(view);
         rootChildren.addAll(text);
         rootChildren.addAll(graphicPieces);
+        rootChildren.addAll(generatePlayersText());
+
+        //rootChildren.addAll(generateTestGraphicPieces(100));
 
         Scene scene = new Scene(root, 1600, 900);
         stage.setTitle("Hello!");
@@ -83,7 +78,7 @@ public class MyApplication extends Application {
         drawGame();
         game.calculateBeforeMove(-1);
 
-        testFinish();
+        //testFinish();
         /*game.setDie(new Die(){
             @Override
             public int getNumber() {
@@ -93,11 +88,7 @@ public class MyApplication extends Application {
         //game.start();
         System.out.printf("Long=%d, short=%d", TILE_LONG_SIDE, TILE_SHORT_SIDE);
 
-        Text score = new Text("3");
-        score.setFont(Font.font(20D));
-        score.setX(465);
-        score.setY(415);
-        rootChildren.add(score);
+
         /*Button go = new Button("Game over!");
         Pane popupPane = new Pane(go);
         Scene popupScene = new Scene(popupPane, 300, 300);
@@ -297,14 +288,46 @@ public class MyApplication extends Application {
         return result;
     }
 
+    public Text[] generatePlayersText() {
+        Player[] players = game.getPlayers();
+
+        Text[] texts = new Text[players.length];
+        for (int i = 0; i < texts.length; i++) {
+            texts[i] = new Text("0");
+            texts[i].setFont(Font.font(20D));
+            players[i].setTextFinishedPiecesCounter(texts[i]);
+        }
+
+        //red
+        texts[0].setX(465);
+        texts[0].setY(415);
+
+        //blue
+        texts[1].setX(515);
+        texts[1].setY(465);
+
+        //yellow
+        texts[2].setX(465);
+        texts[2].setY(515);
+
+        //green
+        texts[3].setX(415);
+        texts[3].setY(465);
+
+        return texts;
+    }
+
     public static void main(String[] args) {
         launch();
     }
 
     public void testFinish() {
-        Player player = game.getPlayers()[0];
-        for (Piece piece: player.getPieces()) {
-            piece.setHasFinished(true);
+        Player[] players = game.getPlayers();
+        for (int i = 0; i < players.length; i++) {
+            Player player = players[i];
+            for (Piece piece: player.getPieces()) {
+                piece.setHasFinished(true);
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 package ru.vsu.cs.yurov.logics;
 
+import javafx.scene.text.Text;
 import ru.vsu.cs.yurov.logics.actions.HomeState;
 
 public class Player {
@@ -10,9 +11,36 @@ public class Player {
     Tile[] tiles;
     private Piece lastPiece;
 
+    private int finishedPiecesCounter = 0;
+    private Text textFinishedPiecesCounter;
+
+    public boolean canMove() {
+        boolean result = false;
+        for (Piece piece: pieces) {
+            result |= piece.canMove();
+        }
+
+        return result;
+    }
+
+    public boolean isAllFinished() {
+        boolean result = true;
+        for (Piece piece: pieces) {
+            result &= piece.hasFinished();
+        }
+
+        return result;
+    }
+
+    public void addFinishedPiecesCounter() {
+        finishedPiecesCounter++;
+        textFinishedPiecesCounter.setText(String.valueOf(finishedPiecesCounter));
+    }
+
     public void addSixCounter() {
         sixCounter++;
     }
+
 
     public Piece[] getPieces() {
         return pieces;
@@ -54,21 +82,15 @@ public class Player {
         this.lastPiece = lastPiece;
     }
 
-    public boolean canMove() {
-        boolean result = false;
-        for (Piece piece: pieces) {
-            result |= piece.canMove();
-        }
-
-        return result;
+    public int getFinishedPiecesCounter() {
+        return finishedPiecesCounter;
     }
 
-    public boolean isAllFinished() {
-        boolean result = true;
-        for (Piece piece: pieces) {
-            result &= piece.hasFinished();
-        }
+    public Text getTextFinishedPiecesCounter() {
+        return textFinishedPiecesCounter;
+    }
 
-        return result;
+    public void setTextFinishedPiecesCounter(Text textFinishedPiecesCounter) {
+        this.textFinishedPiecesCounter = textFinishedPiecesCounter;
     }
 }

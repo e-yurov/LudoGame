@@ -19,7 +19,6 @@ public class Game {
     private Die die;
 
     private PieceActionTypeDefiner pieceActionTypeDefiner;
-    private PieceActionReceiver receiver;
     private PieceMoveAbilityComputer pieceMoveAbilityComputer;
 
     private Tile[] normalTiles;
@@ -58,7 +57,7 @@ public class Game {
 
     public void calculateBeforeMove(int bonusNumber) {
         Player player = players[currentPlayerIndex];
-        currentNumber = bonusNumber < 0 ? die.getNumber() : bonusNumber;
+        currentNumber = bonusNumber <= 0 ? die.getNumber() : bonusNumber;
         if (currentNumber == 6 && player.getSixCounter() == 2) {
             player.getLastPiece().bust();
         }
@@ -75,16 +74,23 @@ public class Game {
         }
     }
 
-    public PieceActionType makeMove(Piece piece) {
+    public int makeMove(Piece piece) {
         Player player = players[currentPlayerIndex];
 
-
-        //Piece piece = receiver.receive(player, number);
         player.setLastPiece(piece);
         PieceActionType actionType = pieceActionTypeDefiner.defineAction(piece, currentNumber);
         actionType.getAction().perform(piece, currentNumber);
 
-        return actionType;
+        if (actionType == PieceActionType.HIT) {
+            return 20;
+        }
+        if (actionType == PieceActionType.FINISH) {
+            return 10;
+        }
+        if (currentNumber == 6) {
+            return 0;
+        }
+        return -1;
     }
 
     public void selectNextPlayer() {
@@ -206,10 +212,6 @@ public class Game {
         this.pieceActionTypeDefiner = pieceActionTypeDefiner;
     }
 
-    public void setReceiver(PieceActionReceiver receiver) {
-        this.receiver = receiver;
-    }
-
     public void setPiecesHandler(PieceMoveAbilityComputer pieceMoveAbilityComputer) {
         this.pieceMoveAbilityComputer = pieceMoveAbilityComputer;
     }
@@ -249,10 +251,6 @@ public class Game {
 
     public PieceActionTypeDefiner getPieceMoveHandler() {
         return pieceActionTypeDefiner;
-    }
-
-    public PieceActionReceiver getReceiver() {
-        return receiver;
     }
 
     public PieceMoveAbilityComputer getPiecesHandler() {
