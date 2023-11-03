@@ -4,15 +4,22 @@ import javafx.scene.text.Text;
 import ru.vsu.cs.yurov.logics.actions.HomeState;
 
 public class Player {
-    Piece[] pieces;
-    int sixCounter = 0;
-    private PlayerColor color;
-
-    Tile[] tiles;
+    private Piece[] pieces;
+    private Tile[] tiles;
     private Piece lastPiece;
+    private PlayerColor color;
 
     private int finishedPiecesCounter = 0;
     private Text textFinishedPiecesCounter;
+
+    private int sixCounter = 0;
+
+    public Player(Tile[] tiles, PlayerColor color) {
+        this.tiles = tiles;
+        this.color = color;
+    }
+
+    public Player() {}
 
     public boolean canMove() {
         boolean result = false;
@@ -32,15 +39,6 @@ public class Player {
         return result;
     }
 
-    public void addFinishedPiecesCounter() {
-        finishedPiecesCounter++;
-        textFinishedPiecesCounter.setText(String.valueOf(finishedPiecesCounter));
-    }
-
-    public void addSixCounter() {
-        sixCounter++;
-    }
-
     public boolean isAllOut() {
         boolean result = true;
         for (Piece piece: pieces) {
@@ -50,10 +48,15 @@ public class Player {
         return result;
     }
 
-
-    public Piece[] getPieces() {
-        return pieces;
+    public void addFinishedPiecesCounter() {
+        finishedPiecesCounter++;
+        textFinishedPiecesCounter.setText(String.valueOf(finishedPiecesCounter));
     }
+
+    public void addSixCounter() {
+        sixCounter++;
+    }
+
 
     public PlayerColor getColor() {
         return color;
@@ -61,6 +64,10 @@ public class Player {
 
     public void setColor(PlayerColor color) {
         this.color = color;
+    }
+
+    public Piece[] getPieces() {
+        return pieces;
     }
 
     public void setPieces(Piece[] pieces) {
@@ -93,10 +100,6 @@ public class Player {
 
     public int getFinishedPiecesCounter() {
         return finishedPiecesCounter;
-    }
-
-    public Text getTextFinishedPiecesCounter() {
-        return textFinishedPiecesCounter;
     }
 
     public void setTextFinishedPiecesCounter(Text textFinishedPiecesCounter) {

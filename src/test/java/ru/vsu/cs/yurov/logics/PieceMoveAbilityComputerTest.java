@@ -16,8 +16,8 @@ public class PieceMoveAbilityComputerTest {
         piece.setTilesPassed(0);
         piece.setCurrentTile(zeroTile);
 
-        player.tiles = new Tile[]{zeroTile, new Tile(), new Tile(), new Tile(), new Tile(), new Tile(), finalTile};
-        player.pieces = new Piece[]{piece};
+        player.setTiles(new Tile[]{zeroTile, new Tile(), new Tile(), new Tile(), new Tile(), new Tile(), finalTile});
+        player.setPieces(new Piece[]{piece});
 
         PieceMoveAbilityComputer.compute(player, 6);
 
@@ -37,8 +37,8 @@ public class PieceMoveAbilityComputerTest {
         piece.setTilesPassed(0);
         piece.setCurrentTile(zeroTile);
 
-        player.tiles = new Tile[]{zeroTile, new Tile(), new Tile(), new Tile(), new Tile(), new Tile(), finalTile};
-        player.pieces = new Piece[]{piece};
+        player.setTiles(new Tile[]{zeroTile, new Tile(), new Tile(), new Tile(), new Tile(), new Tile(), finalTile});
+        player.setPieces(new Piece[]{piece});
 
         PieceMoveAbilityComputer.compute(player, 6);
 
@@ -56,16 +56,18 @@ public class PieceMoveAbilityComputerTest {
         Piece piece1 = new Piece();
         piece1.setTilesPassed(0);
         piece1.setCurrentTile(zeroTile);
+        piece1.setHomeState(HomeState.OUT);
         Piece piece2 = new Piece();
         piece2.setTilesPassed(1);
         piece2.setCurrentTile(firstTile);
+        piece2.setHomeState(HomeState.OUT);
 
         zeroTile.setFirstPiece(piece1);
         zeroTile.setSecondPiece(new Piece());
         firstTile.setFirstPiece(piece2);
 
-        player.tiles = new Tile[]{zeroTile, firstTile, new Tile(), new Tile(), new Tile(), new Tile(), finalTile, new Tile()};
-        player.pieces = new Piece[]{piece1, piece2};
+        player.setTiles(new Tile[]{zeroTile, firstTile, new Tile(), new Tile(), new Tile(), new Tile(), finalTile, new Tile()});
+        player.setPieces(new Piece[]{piece1, piece2});
 
         PieceMoveAbilityComputer.compute(player, 6);
 
@@ -86,8 +88,8 @@ public class PieceMoveAbilityComputerTest {
         piece.setTilesPassed(0);
         piece.setCurrentTile(zeroTile);
 
-        player.tiles = new Tile[]{zeroTile, new Tile(), new Tile(), blockTile, new Tile(), new Tile()};
-        player.pieces = new Piece[]{piece};
+        player.setTiles(new Tile[]{zeroTile, new Tile(), new Tile(), blockTile, new Tile(), new Tile()});
+        player.setPieces(new Piece[]{piece});
 
         PieceMoveAbilityComputer.compute(player, 5);
 
@@ -105,13 +107,13 @@ public class PieceMoveAbilityComputerTest {
         piece.setCurrentTile(zeroTile);
 
         Tile[] playerTiles = new Tile[Piece.TILES_COUNT];
-        player.tiles = playerTiles;
+        player.setTiles(playerTiles);
         for (int i = 0; i < 70; i++) {
             playerTiles[i] = new Tile();
         }
         playerTiles[70] = zeroTile;
         playerTiles[71] = new Tile();
-        player.pieces = new Piece[]{piece};
+        player.setPieces(new Piece[]{piece});
 
         PieceMoveAbilityComputer.compute(player, 1);
         Assertions.assertTrue(piece.canMove());
@@ -130,8 +132,8 @@ public class PieceMoveAbilityComputerTest {
         Piece piece = new Piece();
         piece.setHomeState(HomeState.IN);
 
-        player.tiles = new Tile[]{new Tile(), new Tile(), new Tile(), new Tile(), new Tile(), new Tile(), new Tile()};
-        player.pieces = new Piece[]{piece};
+        player.setTiles(new Tile[]{new Tile(), new Tile(), new Tile(), new Tile(), new Tile(), new Tile(), new Tile()});
+        player.setPieces(new Piece[]{piece});
 
         PieceMoveAbilityComputer.compute(player, 6);
         Assertions.assertTrue(piece.canMove());
@@ -154,8 +156,8 @@ public class PieceMoveAbilityComputerTest {
         Piece piece2 = new Piece();
         piece2.setHomeState(HomeState.IN);
 
-        player.tiles = new Tile[]{zeroTile, new Tile(), new Tile(), new Tile(), new Tile(), new Tile(), new Tile()};
-        player.pieces = new Piece[]{piece1, piece2};
+        player.setTiles(new Tile[]{zeroTile, new Tile(), new Tile(), new Tile(), new Tile(), new Tile(), new Tile()});
+        player.setPieces(new Piece[]{piece1, piece2});
 
         PieceMoveAbilityComputer.compute(player, 5);
         Assertions.assertTrue(piece1.canMove());

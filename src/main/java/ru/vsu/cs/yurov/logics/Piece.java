@@ -4,16 +4,28 @@ import ru.vsu.cs.yurov.logics.actions.HomeState;
 
 public class Piece {
     public static final int TILES_COUNT = 72;
-    public static final int COLORED_TILES_COUNT = 8;
 
     private Tile currentTile;
-    private boolean canMove;
-    private HomeState homeState = HomeState.OUT;
-    private int tilesPassed = -1;
+    private HomeState homeState;
     private Player player;
-    private boolean hasFinished = false;
 
+    private boolean canMove;
+    private boolean hasFinished;
+
+    private int tilesPassed;
     private int index;
+
+
+    public Piece(Tile currentTile, HomeState homeState, Player player, int tilesPassed, int index) {
+        this.currentTile = currentTile;
+        this.homeState = homeState;
+        this.player = player;
+        this.hasFinished = false;
+        this.tilesPassed = tilesPassed;
+        this.index = index;
+    }
+
+    public Piece() {}
 
     public void kill() {
         currentTile.removePiece(this);
@@ -22,7 +34,6 @@ public class Piece {
             tilesPassed = Game.PIECE_NORMAL_TILES_COUNT;
 
             Tile colorBeginningTile = player.getTiles()[Game.PIECE_NORMAL_TILES_COUNT];
-            //currentTile.setPiece(this);
             currentTile = colorBeginningTile;
             colorBeginningTile.setPiece(this);
             return;
@@ -91,9 +102,5 @@ public class Piece {
 
     public int getIndex() {
         return index;
-    }
-
-    public void setIndex(int index) {
-        this.index = index;
     }
 }

@@ -21,12 +21,12 @@ public class PieceMoveAbilityComputer {
 
             for (Piece piece : player.getPieces()) {
                 if (piece.getHomeState() == HomeState.IN) {
-                    piece.setCanMove(!player.tiles[0].isFull());
+                    piece.setCanMove(!player.getTiles()[0].isFull());
                 } else {
                     if (hasBlocks && isAllOut) {
                         piece.setCanMove(piece.getCurrentTile().isFull() &&
-                                piece.getTilesPassed() + number < Piece.TILES_COUNT &&
-                                !player.tiles[piece.getTilesPassed() + number].isFull());
+                                piece.getTilesPassed() + number < Game.PIECE_ALL_TILES_COUNT &&
+                                !player.getTiles()[piece.getTilesPassed() + number].isFull());
                     } else {
                         piece.setCanMove(checkTile(player, piece, number));
                     }
@@ -38,7 +38,7 @@ public class PieceMoveAbilityComputer {
         player.setSixCounter(0);
         for (Piece piece : player.getPieces()) {
             if (piece.getHomeState() == HomeState.IN) {
-                piece.setCanMove(number >= 5 && !player.tiles[0].isFull());
+                piece.setCanMove(number >= 5 && !player.getTiles()[0].isFull());
             } else {
                 piece.setCanMove(checkTile(player, piece, number));
             }
@@ -50,14 +50,15 @@ public class PieceMoveAbilityComputer {
         int tilesPassed = piece.getTilesPassed();
 
         int nextTileIndex = tilesPassed + number;
-        if (nextTileIndex >= Piece.TILES_COUNT) {
+        if (nextTileIndex >= Game.PIECE_ALL_TILES_COUNT) {
             return false;
         }
         if (number == 20 || number == 10) {
             return !player.getTiles()[nextTileIndex].isFull();
         }
+        Tile[] playerTiles = player.getTiles();
         for (int i = tilesPassed + 1; i <= nextTileIndex; i++) {
-            if (player.tiles[i].isFull()) {
+            if (playerTiles[i].isFull()) {
                 return false;
             }
         }

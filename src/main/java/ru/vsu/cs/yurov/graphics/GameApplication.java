@@ -70,11 +70,11 @@ public class GameApplication extends Application {
         stage.setScene(scene);
         stage.show();
 
-        game.calculateBeforeMove(-1);
-        drawGame();
-
         //enableTestFinish();
         //enableTestSixes();
+
+        game.calculateBeforeMove(-1);
+        drawGame();
     }
 
     public void drawGame() {
@@ -110,16 +110,17 @@ public class GameApplication extends Application {
 
     void handleGraphicPieceClick(Piece piece) {
         Player player = piece.getPlayer();
+        Piece lastPiece = player.getLastPiece();
         if (player.getSixCounter() == 3) {
-            if (player.getLastPiece().isOnColorTile()) {
+            if (lastPiece.isOnColorTile()) {
                 sixesInRowText.setText("Three \"6\" in a row!\nLast piece was returned to the color road's beginning");
             } else {
                 sixesInRowText.setText("Three \"6\" in a row!\nLast piece was killed :(");
             }
 
             player.setSixCounter(0);
-            if (!piece.getCurrentTile().isSafe()) {
-                player.getLastPiece().kill();
+            if (!lastPiece.getCurrentTile().isSafe()) {
+                lastPiece.kill();
             } else {
                 sixesInRowText.setText("Three \"6\" in a row!\nFortunately, last piece was on the safe tile :)");
             }
@@ -197,8 +198,7 @@ public class GameApplication extends Application {
     public GraphicPiece[] generateTestGraphicPieces(int size) {
         List<GraphicPiece> result = new ArrayList<>();
         for (int i = 0; i < size; i++) {
-            Tile tile = new Tile();
-            tile.setIndex(i);
+            Tile tile = new Tile(i);
 
             Random random = new Random();
             int num = random.nextInt(1, 3);
