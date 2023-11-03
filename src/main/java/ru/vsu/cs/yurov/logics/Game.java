@@ -25,8 +25,9 @@ public class Game {
 
     private Text text;
     private int currentNumber = -1;
-    private Game() {
-        players = new Player[4];
+
+    private Game(int playersCount) {
+        players = new Player[playersCount];
         currentPlayerIndex = 0;
         die = new Die();
         normalTiles = new Tile[NORMAL_TILES_COUNT];
@@ -101,8 +102,8 @@ public class Game {
 
 
     public static class Creator {
-        public static Game create() {
-            Game game = new Game();
+        public static Game create(int playersCount) {
+            Game game = new Game(playersCount);
             generateTiles(game);
             generatePlayers(game);
 
@@ -127,8 +128,12 @@ public class Game {
         private static void generatePlayers(Game game) {
             game.players[0] = generatePlayer(38, game.redTiles, PlayerColor.RED, game.normalTiles);
             game.players[1] = generatePlayer(21, game.blueTiles, PlayerColor.BLUE, game.normalTiles);
-            game.players[2] = generatePlayer(4, game.yellowTiles, PlayerColor.YELLOW, game.normalTiles);
-            game.players[3] = generatePlayer(55, game.greenTiles, PlayerColor.GREEN, game.normalTiles);
+            if (game.players.length >= 3) {
+                game.players[2] = generatePlayer(4, game.yellowTiles, PlayerColor.YELLOW, game.normalTiles);
+            }
+            if (game.players.length >= 4) {
+                game.players[3] = generatePlayer(55, game.greenTiles, PlayerColor.GREEN, game.normalTiles);
+            }
         }
 
         private static Player generatePlayer(int startTileIndex, Tile[] colorTiles, PlayerColor color, Tile[] normalTiles) {
@@ -137,7 +142,7 @@ public class Game {
                 int tileIndex = (startTileIndex + i) % 68;
                 playerTiles[i] = normalTiles[tileIndex];
             }
-            for (int i = 64, j = 0; i < PIECE_ALL_TILES_COUNT; i++, j++) {
+            for (int i = PIECE_NORMAL_TILES_COUNT, j = 0; i < PIECE_ALL_TILES_COUNT; i++, j++) {
                 playerTiles[i] = colorTiles[j];
             }
 

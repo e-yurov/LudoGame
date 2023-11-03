@@ -6,6 +6,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -32,19 +34,14 @@ public class GameApplication extends Application {
     private Stage stage;
 
     private GraphicPiece[] testGraphicPieces;
+    private Text dieNumberText;
     private Text sixesInRowText;
-    @Override
-    public void start(Stage stage) {
-        this.stage = stage;
-        Pane root = new Pane();
-        //root.setOnMouseClicked(mouseEvent -> System.out.printf("x: %.0f, y: %.0f\n", mouseEvent.getX(), mouseEvent.getY()));
-        ObservableList<Node> rootChildren = root.getChildren();
-        Image board = new Image("board.png");
-        ImageView view = new ImageView(board);
-        view.setFitWidth(BOARD_SIZE);
-        view.setFitHeight(BOARD_SIZE);
 
-        Text dieNumberText = new Text();
+    private int playersCount;
+
+    @Override
+    public void init() {
+        dieNumberText = new Text();
         dieNumberText.setFont(Font.font(20D));
         dieNumberText.setX(930);
         dieNumberText.setY(20);
@@ -53,11 +50,60 @@ public class GameApplication extends Application {
         sixesInRowText.setFont(Font.font(20D));
         sixesInRowText.setX(930);
         sixesInRowText.setY(100);
+    }
 
+    @Override
+    public void start(Stage stage) {
+        VBox root = new VBox();
 
-        game = Game.Creator.create();
+        Text text = new Text("Select number of players:");
+        text.setFont(Font.font(20D));
+
+        RadioButton two = new RadioButton("2");
+        two.setUserData(2);
+        two.setFont(Font.font(20D));
+        RadioButton three = new RadioButton("3");
+        three.setUserData(3);
+        three.setFont(Font.font(20D));
+        RadioButton four = new RadioButton("4");
+        four.setUserData(4);
+        four.setFont(Font.font(20D));
+
+        ToggleGroup toggleGroup = new ToggleGroup();
+        two.setToggleGroup(toggleGroup);
+        three.setToggleGroup(toggleGroup);
+        four.setToggleGroup(toggleGroup);
+
+        Button button = new Button("Select");
+        button.setFont(Font.font(20D));
+
+        root.getChildren().addAll(text, two, three, four, button);
+        root.setAlignment(Pos.CENTER);
+        root.setSpacing(10D);
+
+        Scene scene = new Scene(root, 300, 300);
+        stage.setTitle("Players");
+        stage.setScene(scene);
+        stage.show();
+
+        button.setOnAction(actionEvent -> {
+            stage.close();
+            playersCount = (int) toggleGroup.getSelectedToggle().getUserData();
+            startGame();
+        });
+    }
+
+    public void startGame() {
+        this.stage = new Stage();
+        Pane root = new Pane();
+        ObservableList<Node> rootChildren = root.getChildren();
+        Image board = new Image("board.png");
+        ImageView view = new ImageView(board);
+        view.setFitWidth(BOARD_SIZE);
+        view.setFitHeight(BOARD_SIZE);
+
+        game = Game.Creator.create(playersCount);
         game.setText(dieNumberText);
-
         graphicTiles = GraphicComponentsGenerator.generateGraphicTiles();
         graphicPieces = GraphicComponentsGenerator.generateGraphicPieces(game.getPieces(), this);
 
@@ -65,8 +111,8 @@ public class GameApplication extends Application {
         rootChildren.addAll(graphicPieces);
         rootChildren.addAll(GraphicComponentsGenerator.generatePlayersText(game.getPlayers()));
 
-        Scene scene = new Scene(root, 1600, 900);
-        stage.setTitle("Hello!");
+        Scene scene = new Scene(root, 1500, 900);
+        stage.setTitle("Ludo game");
         stage.setScene(scene);
         stage.show();
 
@@ -148,6 +194,7 @@ public class GameApplication extends Application {
         checkWin();
     }
 
+
     public static void main(String[] args) {
         launch();
     }
@@ -187,7 +234,7 @@ public class GameApplication extends Application {
         piece3.setTilesPassed(0);
         piece3.setCurrentTile(player.getTiles()[0]);
 
-        game.setDie(new Die(){
+        game.setDie(new Die() {
             @Override
             public int getNumber() {
                 return 6;
